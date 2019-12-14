@@ -3,6 +3,7 @@ title: A Modified Draft Pick Selection Order
 author: ''
 date: '2016-09-20'
 slug: a-modified-draft-pick-selection-order
+aliases: ["/r/expected-draft-pick/"]
 categories:
   - r
 tags:

@@ -3,6 +3,7 @@ title: Winning the World Chess Championship
 author: ''
 date: '2018-11-16'
 slug: winning-the-world-chess-championship
+aliases: ["/r/world-chess-championship/"]
 categories:
   - r
 tags:

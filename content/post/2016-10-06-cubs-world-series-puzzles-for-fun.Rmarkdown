@@ -3,6 +3,7 @@ title: Cubs World Series Puzzles (For Fun)
 author: ''
 date: '2016-10-06'
 slug: cubs-world-series-puzzles-for-fun
+aliases: ["/r/cubs-world-series-wins/"]
 categories:
   - r
 tags:
