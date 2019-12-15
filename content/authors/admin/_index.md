@@ -18,7 +18,7 @@ organizations:
   url: "https://macss.uchicago.edu"
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include distributed robotics, mobile computing and programmable matter.
+bio: Husband, father, ~~political scientist~~ computational social scientist, teacher, data nerd.
 
 interests:
 - Computational social science
@@ -52,6 +52,9 @@ social:
 - icon: github
   icon_pack: fab
   link: https://github.com/bensoltoff
+- icon: linkedin
+  icon_pack: fab
+  link: https://www.linkedin.com/in/benjaminsoltoff/
 
 # Link to a PDF of your resume/CV from the About widget.
 # To enable, copy your resume/CV to `static/files/cv.pdf` and uncomment the lines below.
@@ -69,4 +72,11 @@ user_groups:
 - Visitors
 ---
 
-Benjamin Soltoff is an assistant instructional professor in computational social science and assistant director of the Masters in Computational Social Science at the University of Chicago. He is a political scientist with concentrations in American government, political methodology, and law and courts. Additionally, he has training and experience in data science, big data analytics, and policy evaluation. He currently teaches courses in social scientific research design, computational modeling, data science, math/statistics, and data visualization.
+I am an assistant instructional professor in computational social science and assistant director of the Masters in Computational Social Science at the University of Chicago. I teach learners social scientific research design, computational modeling, data science, math/statistics, and data visualization.
+
+I enjoy working with individuals from all backgrounds interested in applying computational methods to extract knowledge and inferences from a wide-range of domains. I have training and experience in data science and policy evaluation. In addition to my academic work, I offer consulting services for organizations interested in data science, including research and analysis as well as tailored workshops teaching programming skills to your employees.
+
+
+
+
+
