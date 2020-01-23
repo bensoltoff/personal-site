@@ -69,6 +69,10 @@ I also offer custom training and research services for companies interested in l
 
 ![Our fantastic daughter Beverly](/img/beverly.jpg)
 
+* Our stupendous daughter Rosemarie
+
+![Our stupendous daughter Beverly](/img/rosemarie.jpg)
+
 * Our cute cat Ariel
 
 ![Our cute cat Ariel](/img/ariel.jpg)
