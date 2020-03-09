@@ -170,3 +170,7 @@ ggplot(cut_combo, aes(cut1, cut2, fill = p1_prop)) +
 
 As can be seen above, if either player adjusts his or her strategy, then one of them will be more successful in the long run. In order to maintain the balance, each player should discard their first number if it is less than approximately `r sqrt(5) / 2 - (1 / 2)`.
 
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```

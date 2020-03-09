@@ -31,9 +31,9 @@ options(digits = 4)
     Say one of the players is better than his opponent to the degree that he wins 20 percent of all games, loses 15 percent of games and that 65 percent of games are drawn. Wins at this match are worth 1 point, draws a half-point for each player, and losses 0 points. In a 12-game match, the first player to 6.5 points wins.
     What are the chances the better player wins a 12-game match? How many games would a match have to be in order to give the better player a 75 chance of winning the match outright? A 90 percent chance? A 99 percent chance?
     
-I'm currently teaching a [math/stats course](https://css18.github.io/) and we've recently covered a ton of different probability distributions. This problem can be defined by the [**multinomial distribution**](https://en.wikipedia.org/wiki/Multinomial_distribution), which is a generalizable form of the binomial distribution. In the original setup of the problem, \$n=12\$, \$k=3\$, and probabilities \$p_0 = 0.2, p_1 = 0.15, p_2 = 0.6\$ for the better player winning, losing, and drawing respectively.
+I'm currently teaching a [math/stats course](https://css18.github.io/) and we've recently covered a ton of different probability distributions. This problem can be defined by the [**multinomial distribution**](https://en.wikipedia.org/wiki/Multinomial_distribution), which is a generalizable form of the binomial distribution. In the original setup of the problem, $n=12$, $k=3$, and probabilities $p_0 = 0.2, p_1 = 0.15, p_2 = 0.6$ for the better player winning, losing, and drawing respectively.
 
-Based on the example [here](https://rpubs.com/JanpuHou/296336), I wrote a generalizable function to estimate the probability of win, lose, and draw for all possible outcomes for any number of \$n\$ matches and probabilities \$p\$, and applied it to matches with length between 1 and 300 using the probabilities identified in the problem.
+Based on the example [here](https://rpubs.com/JanpuHou/296336), I wrote a generalizable function to estimate the probability of win, lose, and draw for all possible outcomes for any number of $n$ matches and probabilities $p$, and applied it to matches with length between 1 and 300 using the probabilities identified in the problem.
 
 ```{r setup}
 library(tidyverse)
@@ -101,3 +101,8 @@ varying_matches %>%
 ```
 
 For a standard 12 game match, the probability the better player wins is `r with(varying_matches, prob_win[n_matches == 12])`. To achieve a 75% or better probability of success, the match length should be `r which(abs(varying_matches$prob_win - .75) == min(abs(varying_matches$prob_win - .75)))`. For a 90% chance, it should be a best of `r which(abs(varying_matches$prob_win - .90) == min(abs(varying_matches$prob_win - .90)))` games match. For 99%, make that best of `r which(abs(varying_matches$prob_win - .99) == min(abs(varying_matches$prob_win - .99)))`.
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```

@@ -84,5 +84,7 @@ semi_join(palindrome_usa, palindrome_eur, by = "date")
 
 Nope.
 
+## Session Info
 
-
+```{r child = here::here("R", "_session-info.Rmd")}
+```

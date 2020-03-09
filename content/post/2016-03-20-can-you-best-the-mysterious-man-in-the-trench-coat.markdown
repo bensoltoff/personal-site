@@ -25,11 +25,11 @@ math: false
 
 The latest [Riddler puzzle on FiveThirtyEight](http://fivethirtyeight.com/features/can-you-best-the-mysterious-man-in-the-trench-coat/):
 
-> A man in a trench coat approaches you and pulls an envelope from his pocket. He tells you that it contains a sum of money in bills, anywhere from \$1 up to $1,000. He says that if you can guess the exact amount, you can keep the money. After each of your guesses he will tell you if your guess is too high, or too low. But! You only get nine tries. *What should your first guess be to maximize your expected winnings?*
+> A man in a trench coat approaches you and pulls an envelope from his pocket. He tells you that it contains a sum of money in bills, anywhere from $1 up to $1,000. He says that if you can guess the exact amount, you can keep the money. After each of your guesses he will tell you if your guess is too high, or too low. But! You only get nine tries. *What should your first guess be to maximize your expected winnings?*
 
-My solution is based on a basic, yet elegant, strategy. The first guess can be selected arbitrarily between \$1 and \$1000 - let's say here that my first guess is \$500. If my guess is correct, then I win (yay!). But since I have just a 1 in 1000 probability of guessing correctly on the first try, I'm probably not done. So if the trenchcoat man says the actual value is higher, my next guess will be the midway point between my first guess and the maximum possible value. Initially, this will be \$1000. If the trenchcoat man says the actual value is lower, my next guess will be the midway point between my first guess and the minimum possible value (\$1).
+My solution is based on a basic, yet elegant, strategy. The first guess can be selected arbitrarily between $1 and $1000 - let's say here that my first guess is $500. If my guess is correct, then I win (yay!). But since I have just a 1 in 1000 probability of guessing correctly on the first try, I'm probably not done. So if the trenchcoat man says the actual value is higher, my next guess will be the midway point between my first guess and the maximum possible value. Initially, this will be $1000. If the trenchcoat man says the actual value is lower, my next guess will be the midway point between my first guess and the minimum possible value ($1).
 
-So let's say my guess is too low and the actual value is higher. My second guess would be \$750. If I'm correct, I win. If the actual amount is lower, my next guess will be the midpoint between \$500 and \$750 - remember that I now know it must be within this range.
+So let's say my guess is too low and the actual value is higher. My second guess would be $750. If I'm correct, I win. If the actual amount is lower, my next guess will be the midpoint between $500 and $750 - remember that I now know it must be within this range.
 
 I can iterate through this process with up to 9 guesses. At that point, if I still have not guessed the amount, I lose.
 
@@ -86,7 +86,7 @@ guess_money <- function(actual, initial, n_tries = 9,
 }
 ```
 
-As an example, let's say the actual amount of money is \$736 and my first guess is \$500. Here's how that would play out:
+As an example, let's say the actual amount of money is $736 and my first guess is $500. Here's how that would play out:
 
 
 ```r
@@ -112,7 +112,7 @@ guess_money(actual = 736, initial = 500, print_guess = TRUE)
 
 This tells me the different guesses, as well as the fact that I eventually won (win = 1) in the ninth round.
 
-Of course, there is no reason why I have to choose \$500 for my initial guess. What if I instead started at \$1?
+Of course, there is no reason why I have to choose $500 for my initial guess. What if I instead started at $1?
 
 
 ```r
@@ -251,7 +251,7 @@ ggplot(exp_val, aes(guess, exp_val)) +
 
 <img src="/post/2016-03-20-can-you-best-the-mysterious-man-in-the-trench-coat_files/figure-html/exp_val-1.png" width="672" />
 
-So if you get up to nine guesses, your first guess should be $744. Why is it not \$500? Shouldn't that be optimal, since it minimizes the potential range of values for which you'll need to initially account? Well, not quite.
+So if you get up to nine guesses, your first guess should be $744. Why is it not $500? Shouldn't that be optimal, since it minimizes the potential range of values for which you'll need to initially account? Well, not quite.
 
 There are a range of initial guesses that provide you the same overall win rate.
 
@@ -272,7 +272,7 @@ both %>%
 
 <img src="/post/2016-03-20-can-you-best-the-mysterious-man-in-the-trench-coat_files/figure-html/win_rate-1.png" width="672" />
 
-The win rate for initially guessing \$300 is the same as for initially guessing \$600 - 51.1%. However the expected value for initially guessing \$300 is just \$204, compared to initially guessing \$600 (\$281). Which actual values can you win before you run out of attempts?
+The win rate for initially guessing $300 is the same as for initially guessing $600 - 51.1%. However the expected value for initially guessing $300 is just $204, compared to initially guessing $600 ($281). Which actual values can you win before you run out of attempts?
 
 
 ```r
@@ -420,9 +420,9 @@ ggplot(tries_all_exp, aes(guess, win_rate,
 
 11 is the minimum number of guesses needed to guarantee victory.
 
-## Update 2: \$744 or \$745?
+## Update 2: $744 or $745?
 
-[Others](http://somedisagree.com/2016/03/20/the-538-riddlerweird-guy-in-trench-coat/) have found the optimal starting guess to be \$745. This discrepancy is based on how you round each guess. The default `R` approach to rounding [is complicated](https://ironholds.org/projects/rbitrary/#why-doesnt-round-work-like-you-think-it-should), but adheres to international standards.
+[Others](http://somedisagree.com/2016/03/20/the-538-riddlerweird-guy-in-trench-coat/) have found the optimal starting guess to be $745. This discrepancy is based on how you round each guess. The default `R` approach to rounding [is complicated](https://ironholds.org/projects/rbitrary/#why-doesnt-round-work-like-you-think-it-should), but adheres to international standards.
 
 ### Original rounding method
 
@@ -596,3 +596,82 @@ bind_cols(data, t(result) %>%
 ## 2   745    0.511    319.
 ```
 
+## Session Info
+
+
+
+```r
+devtools::session_info()
+```
+
+```
+## ─ Session info ───────────────────────────────────────────────────────────────
+##  setting  value                       
+##  version  R version 3.6.1 (2019-07-05)
+##  os       macOS Catalina 10.15.3      
+##  system   x86_64, darwin15.6.0        
+##  ui       X11                         
+##  language (EN)                        
+##  collate  en_US.UTF-8                 
+##  ctype    en_US.UTF-8                 
+##  tz       America/Chicago             
+##  date     2020-03-09                  
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────
+##  package     * version date       lib source        
+##  assertthat    0.2.1   2019-03-21 [1] CRAN (R 3.6.0)
+##  backports     1.1.5   2019-10-02 [1] CRAN (R 3.6.0)
+##  blogdown      0.17.1  2020-02-13 [1] local         
+##  bookdown      0.17    2020-01-11 [1] CRAN (R 3.6.0)
+##  callr         3.4.2   2020-02-12 [1] CRAN (R 3.6.1)
+##  cli           2.0.2   2020-02-28 [1] CRAN (R 3.6.0)
+##  colorspace    1.4-1   2019-03-18 [1] CRAN (R 3.6.0)
+##  crayon        1.3.4   2017-09-16 [1] CRAN (R 3.6.0)
+##  desc          1.2.0   2018-05-01 [1] CRAN (R 3.6.0)
+##  devtools      2.2.2   2020-02-17 [1] CRAN (R 3.6.0)
+##  digest        0.6.25  2020-02-23 [1] CRAN (R 3.6.0)
+##  dplyr       * 0.8.4   2020-01-31 [1] CRAN (R 3.6.0)
+##  ellipsis      0.3.0   2019-09-20 [1] CRAN (R 3.6.0)
+##  evaluate      0.14    2019-05-28 [1] CRAN (R 3.6.0)
+##  fansi         0.4.1   2020-01-08 [1] CRAN (R 3.6.0)
+##  fs            1.3.1   2019-05-06 [1] CRAN (R 3.6.0)
+##  ggplot2     * 3.2.1   2019-08-10 [1] CRAN (R 3.6.0)
+##  ggrepel     * 0.8.1   2019-05-07 [1] CRAN (R 3.6.0)
+##  glue          1.3.1   2019-03-12 [1] CRAN (R 3.6.0)
+##  gtable        0.3.0   2019-03-25 [1] CRAN (R 3.6.0)
+##  here          0.1     2017-05-28 [1] CRAN (R 3.6.0)
+##  htmltools     0.4.0   2019-10-04 [1] CRAN (R 3.6.0)
+##  knitr         1.28    2020-02-06 [1] CRAN (R 3.6.0)
+##  lazyeval      0.2.2   2019-03-15 [1] CRAN (R 3.6.0)
+##  lifecycle     0.1.0   2019-08-01 [1] CRAN (R 3.6.0)
+##  magrittr      1.5     2014-11-22 [1] CRAN (R 3.6.0)
+##  memoise       1.1.0   2017-04-21 [1] CRAN (R 3.6.0)
+##  munsell       0.5.0   2018-06-12 [1] CRAN (R 3.6.0)
+##  pillar        1.4.3   2019-12-20 [1] CRAN (R 3.6.0)
+##  pkgbuild      1.0.6   2019-10-09 [1] CRAN (R 3.6.0)
+##  pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 3.6.0)
+##  pkgload       1.0.2   2018-10-29 [1] CRAN (R 3.6.0)
+##  prettyunits   1.1.1   2020-01-24 [1] CRAN (R 3.6.0)
+##  processx      3.4.2   2020-02-09 [1] CRAN (R 3.6.0)
+##  ps            1.3.2   2020-02-13 [1] CRAN (R 3.6.0)
+##  purrr         0.3.3   2019-10-18 [1] CRAN (R 3.6.0)
+##  R6            2.4.1   2019-11-12 [1] CRAN (R 3.6.0)
+##  Rcpp          1.0.3   2019-11-08 [1] CRAN (R 3.6.0)
+##  remotes       2.1.1   2020-02-15 [1] CRAN (R 3.6.0)
+##  rlang         0.4.5   2020-03-01 [1] CRAN (R 3.6.0)
+##  rmarkdown     2.1     2020-01-20 [1] CRAN (R 3.6.0)
+##  rprojroot     1.3-2   2018-01-03 [1] CRAN (R 3.6.0)
+##  scales        1.1.0   2019-11-18 [1] CRAN (R 3.6.0)
+##  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 3.6.0)
+##  stringi       1.4.6   2020-02-17 [1] CRAN (R 3.6.0)
+##  stringr       1.4.0   2019-02-10 [1] CRAN (R 3.6.0)
+##  testthat      2.3.1   2019-12-01 [1] CRAN (R 3.6.0)
+##  tibble        2.1.3   2019-06-06 [1] CRAN (R 3.6.0)
+##  tidyselect    1.0.0   2020-01-27 [1] CRAN (R 3.6.0)
+##  usethis       1.5.1   2019-07-04 [1] CRAN (R 3.6.0)
+##  withr         2.1.2   2018-03-15 [1] CRAN (R 3.6.0)
+##  xfun          0.12    2020-01-13 [1] CRAN (R 3.6.0)
+##  yaml          2.2.1   2020-02-01 [1] CRAN (R 3.6.0)
+## 
+## [1] /Library/Frameworks/R.framework/Versions/3.6/Resources/library
+```

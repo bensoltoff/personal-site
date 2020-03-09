@@ -34,7 +34,7 @@ One could go the analytical route to solve this
 
 But I wanted to take a computational, brute-force approach. This type of problem is ripe for Markov chain Monte Carlo (MCMC) methods, which I've use before in [Riddler solutions](http://www.bensoltoff.com/r/can-you-win-this-hot-new-game-show/).
 
-The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of \$K\$ groups. The function I wrote is:
+The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of $K$ groups. The function I wrote is:
 
 
 ```r
@@ -73,37 +73,103 @@ draft_pick_sim(n_sims = 10000) %>%
 
 | Original Draft Position| Expected Draft Position|
 |-----------------------:|-----------------------:|
-|                       1|                    8.20|
-|                       2|                    8.67|
-|                       3|                    9.27|
-|                       4|                    9.73|
-|                       5|                   10.32|
-|                       6|                   10.86|
-|                       7|                   11.29|
-|                       8|                   11.79|
-|                       9|                   12.29|
-|                      10|                   12.65|
-|                      11|                   13.28|
-|                      12|                   13.60|
-|                      13|                   14.31|
-|                      14|                   14.71|
-|                      15|                   15.14|
-|                      16|                   15.72|
-|                      17|                   16.21|
-|                      18|                   16.81|
-|                      19|                   17.20|
-|                      20|                   17.72|
-|                      21|                   18.26|
-|                      22|                   18.91|
-|                      23|                   19.40|
-|                      24|                   19.74|
-|                      25|                   20.25|
-|                      26|                   20.68|
-|                      27|                   21.26|
-|                      28|                   21.77|
-|                      29|                   22.19|
-|                      30|                   22.75|
+|                       1|                    8.14|
+|                       2|                    8.77|
+|                       3|                    9.36|
+|                       4|                    9.79|
+|                       5|                   10.22|
+|                       6|                   10.69|
+|                       7|                   11.37|
+|                       8|                   11.59|
+|                       9|                   12.07|
+|                      10|                   12.63|
+|                      11|                   13.35|
+|                      12|                   13.72|
+|                      13|                   14.33|
+|                      14|                   14.47|
+|                      15|                   15.26|
+|                      16|                   15.85|
+|                      17|                   16.32|
+|                      18|                   16.76|
+|                      19|                   17.24|
+|                      20|                   17.81|
+|                      21|                   18.30|
+|                      22|                   18.73|
+|                      23|                   19.29|
+|                      24|                   19.80|
+|                      25|                   20.28|
+|                      26|                   20.73|
+|                      27|                   21.24|
+|                      28|                   21.81|
+|                      29|                   22.36|
+|                      30|                   22.74|
 
 The team originally with the 10th draft can expect to have the *13th pick* under this new approach.
 
-What turned into the more complicated part was turning this function into a working Shiny app. [I encourage you to try it out](https://bensoltoff.shinyapps.io/draft_pick/), as it generalizes the problem by providing expected draft picks given \$N\$ teams and \$K\$ groups.
+What turned into the more complicated part was turning this function into a working Shiny app. [I encourage you to try it out](https://bensoltoff.shinyapps.io/draft_pick/), as it generalizes the problem by providing expected draft picks given $N$ teams and $K$ groups.
+
+## Session Info
+
+
+
+```r
+devtools::session_info()
+```
+
+```
+## ─ Session info ───────────────────────────────────────────────────────────────
+##  setting  value                       
+##  version  R version 3.6.1 (2019-07-05)
+##  os       macOS Catalina 10.15.3      
+##  system   x86_64, darwin15.6.0        
+##  ui       X11                         
+##  language (EN)                        
+##  collate  en_US.UTF-8                 
+##  ctype    en_US.UTF-8                 
+##  tz       America/Chicago             
+##  date     2020-03-09                  
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────
+##  package     * version date       lib source        
+##  assertthat    0.2.1   2019-03-21 [1] CRAN (R 3.6.0)
+##  backports     1.1.5   2019-10-02 [1] CRAN (R 3.6.0)
+##  blogdown      0.17.1  2020-02-13 [1] local         
+##  bookdown      0.17    2020-01-11 [1] CRAN (R 3.6.0)
+##  callr         3.4.2   2020-02-12 [1] CRAN (R 3.6.1)
+##  cli           2.0.2   2020-02-28 [1] CRAN (R 3.6.0)
+##  crayon        1.3.4   2017-09-16 [1] CRAN (R 3.6.0)
+##  desc          1.2.0   2018-05-01 [1] CRAN (R 3.6.0)
+##  devtools      2.2.2   2020-02-17 [1] CRAN (R 3.6.0)
+##  digest        0.6.25  2020-02-23 [1] CRAN (R 3.6.0)
+##  ellipsis      0.3.0   2019-09-20 [1] CRAN (R 3.6.0)
+##  evaluate      0.14    2019-05-28 [1] CRAN (R 3.6.0)
+##  fansi         0.4.1   2020-01-08 [1] CRAN (R 3.6.0)
+##  fs            1.3.1   2019-05-06 [1] CRAN (R 3.6.0)
+##  glue          1.3.1   2019-03-12 [1] CRAN (R 3.6.0)
+##  here          0.1     2017-05-28 [1] CRAN (R 3.6.0)
+##  htmltools     0.4.0   2019-10-04 [1] CRAN (R 3.6.0)
+##  knitr         1.28    2020-02-06 [1] CRAN (R 3.6.0)
+##  magrittr      1.5     2014-11-22 [1] CRAN (R 3.6.0)
+##  memoise       1.1.0   2017-04-21 [1] CRAN (R 3.6.0)
+##  pkgbuild      1.0.6   2019-10-09 [1] CRAN (R 3.6.0)
+##  pkgload       1.0.2   2018-10-29 [1] CRAN (R 3.6.0)
+##  prettyunits   1.1.1   2020-01-24 [1] CRAN (R 3.6.0)
+##  processx      3.4.2   2020-02-09 [1] CRAN (R 3.6.0)
+##  ps            1.3.2   2020-02-13 [1] CRAN (R 3.6.0)
+##  R6            2.4.1   2019-11-12 [1] CRAN (R 3.6.0)
+##  Rcpp          1.0.3   2019-11-08 [1] CRAN (R 3.6.0)
+##  remotes       2.1.1   2020-02-15 [1] CRAN (R 3.6.0)
+##  rlang         0.4.5   2020-03-01 [1] CRAN (R 3.6.0)
+##  rmarkdown     2.1     2020-01-20 [1] CRAN (R 3.6.0)
+##  rprojroot     1.3-2   2018-01-03 [1] CRAN (R 3.6.0)
+##  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 3.6.0)
+##  stringi       1.4.6   2020-02-17 [1] CRAN (R 3.6.0)
+##  stringr       1.4.0   2019-02-10 [1] CRAN (R 3.6.0)
+##  testthat      2.3.1   2019-12-01 [1] CRAN (R 3.6.0)
+##  usethis       1.5.1   2019-07-04 [1] CRAN (R 3.6.0)
+##  withr         2.1.2   2018-03-15 [1] CRAN (R 3.6.0)
+##  xfun          0.12    2020-01-13 [1] CRAN (R 3.6.0)
+##  yaml          2.2.1   2020-02-01 [1] CRAN (R 3.6.0)
+## 
+## [1] /Library/Frameworks/R.framework/Versions/3.6/Resources/library
+```

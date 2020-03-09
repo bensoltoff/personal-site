@@ -70,3 +70,8 @@ wins_5 * wins_7 * wins_7
 There's a lot of ways the Cubs could win the World Series. Of course, [history isn't exactly on their side](https://en.wikipedia.org/wiki/Curse_of_the_Billy_Goat).[^1]
 
 [^1]: But as a newly Chicagoan, I won't mind hopping on the bandwagon.
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```

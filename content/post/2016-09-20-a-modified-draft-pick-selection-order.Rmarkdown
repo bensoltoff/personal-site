@@ -37,7 +37,7 @@ One could go the analytical route to solve this
 
 But I wanted to take a computational, brute-force approach. This type of problem is ripe for Markov chain Monte Carlo (MCMC) methods, which I've use before in [Riddler solutions](http://www.bensoltoff.com/r/can-you-win-this-hot-new-game-show/).
 
-The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of \$K\$ groups. The function I wrote is:
+The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of $K$ groups. The function I wrote is:
 
 ```{r, messages = FALSE}
 library(tidyverse)
@@ -72,4 +72,9 @@ draft_pick_sim(n_sims = 10000) %>%
 
 The team originally with the 10th draft can expect to have the *13th pick* under this new approach.
 
-What turned into the more complicated part was turning this function into a working Shiny app. [I encourage you to try it out](https://bensoltoff.shinyapps.io/draft_pick/), as it generalizes the problem by providing expected draft picks given \$N\$ teams and \$K\$ groups.
+What turned into the more complicated part was turning this function into a working Shiny app. [I encourage you to try it out](https://bensoltoff.shinyapps.io/draft_pick/), as it generalizes the problem by providing expected draft picks given $N$ teams and $K$ groups.
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```

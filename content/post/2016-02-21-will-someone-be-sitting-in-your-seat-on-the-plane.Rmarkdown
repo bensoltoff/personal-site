@@ -116,3 +116,8 @@ correct_by_seats %>%
   labs(x = "Reverse Passenger Boarding Order",
        y = "Average Probability of Sitting in Correct Seat")
 ```
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```
