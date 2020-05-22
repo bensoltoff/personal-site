@@ -1,0 +1,101 @@
+---
+title: Can You Find The Fish In State Names?
+author: Benjamin Soltoff
+date: '2020-05-22'
+slug: can-you-find-the-fish-in-state-names
+categories:
+  - r
+tags:
+  - r
+  - riddler
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-05-22T14:20:11-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r}
+library(tidyverse)
+library(tidytext)
+
+`%notin%` <- Negate(`%in%`)
+
+# get list of words
+all_words <- tibble(word = readLines("https://norvig.com/ngrams/word.list"))
+states <- tibble(word = str_to_lower(state.name))
+
+# combine together
+tokens <- bind_rows(all_words = all_words,
+                    states = states,
+                    .id = "source") %>%
+  # tokenize by character
+  unnest_tokens(output = letter, input = word, token = "characters", drop = FALSE) %>%
+  # remove duplicates
+  distinct() %>%
+  # store data as one row per word and all unique letters as character vectors
+  nest(cols = c(letter)) %>%
+  mutate(letters = map(cols, ~ .$letter)) %>%
+  select(-cols) %>%
+  # split by source
+  group_split(source)
+
+tokens_combo <- expand.grid(word_all = tokens[[1]]$word, word_state = tokens[[2]]$word) %>%
+  left_join(tokens[[1]], by = c("word_all" = "word")) %>%
+  rename(letters_all = letters) %>%
+  left_join(tokens[[2]], by = c("word_state" = "word")) %>%
+  rename(letters_state = letters) %>%
+  as_tibble() %>%
+  select(-starts_with("source"))
+
+tokens_test <- tokens_combo %>%
+  filter(word_state == "ohio", word_all == "mackerel")
+test_all <- tokens_test$letters_all[[1]]
+test_state <- tokens_test$letters_state[[1]]
+
+any(test_all %in% test_state == TRUE)
+
+tokens_test %>%
+  mutate(any_letters_in_common = map2_lgl(letters_all, letters_state, ~ any(.x %in% .y == TRUE)))
+
+library(tictoc)
+
+tic()
+words_not_in_common <- tokens_combo %>%
+  mutate(any_letters_in_common = map2_lgl(letters_all,
+                                          letters_state,
+                                          ~ any(.x %in% .y == TRUE))) %>%
+  filter(!any_letters_in_common)
+toc()
+
+# check to see if a word has multiple mackerels
+unique_mackerels <- words_not_in_common %>%
+  count(word_all) %>%
+  # only keep words with a single mackerel
+  filter(n == 1) %>%
+  # what are their length?
+  left_join(select(tokens[[1]], -source), by = c("word_all" = "word")) %>%
+  mutate(length = map_dbl(letters, length)) %>%
+  arrange(-length)
+
+# what are the longest mackerels?
+unique_mackerels %>%
+  filter(length == max(length))
+
+# which state has the most mackerels?
+words_not_in_common %>%
+  count(word_all) %>%
+  # only keep words with a single mackerel
+  filter(n == 1) %>%
+  # join with states info
+  semi_join(x = words_not_in_common, y = .) %>%
+  count(word_state) %>%
+  ggplot(mapping = aes(x = fct_reorder(word_state, n), y = n)) +
+  geom_col() +
+  coord_flip()
+```
