@@ -120,7 +120,7 @@ mackerels <- words_not_in_common %>%
   filter(n == 1) %>%
   # what are their length?
   left_join(words_not_in_common) %>%
-  mutate(length = map_dbl(letters_all, length)) %>%
+  mutate(length = map_dbl(word_all, nchar)) %>%
   select(-starts_with("letters"), -any_letters_in_common) %>%
   arrange(-length)
 
