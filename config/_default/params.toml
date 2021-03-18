@@ -109,7 +109,7 @@ office_hours = []
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.
 contact_links = [
-  {icon = "twitter", icon_pack = "fab", name = "DM Me", link = "https://twitter.com/soltoffbc"},
+  {icon = "email", icon_pack = "fab", name = "Email Me", link = "mailto:ben@bensoltoff.com"},
   {icon = "linkedin", icon_pack = "fab", name = "Connect with me", link = "https://www.linkedin.com/in/benjaminsoltoff/"}
   ]
 
