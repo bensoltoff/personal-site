@@ -161,3 +161,6 @@ enableEmoji = true
   [privacy.youtube]
     disable = false
     privacyEnhanced = true
+
+[permalinks]
+  blog = "/blog/:slug/"
