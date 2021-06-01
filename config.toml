@@ -103,7 +103,7 @@ enableEmoji = true
   # Configure header
   [[menu.header]]
     name = "About"
-    title = "About/Contact"
+    title = "About"
     url = "/about/"
     weight = 1
   [[menu.header]]
@@ -121,6 +121,11 @@ enableEmoji = true
     title = "Talks"
     url = "/talk/"
     weight = 4
+  [[menu.header]]
+    name = "Contact"
+    title = "Contact me"
+    url = "/Contact/"
+    weight = 5
 
   # Configure footer
   [[menu.footer]]
