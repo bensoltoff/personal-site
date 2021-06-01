@@ -20,22 +20,13 @@ intro: |
 
   ![My amazing wife Amanda](/img/ben-amanda.jpg)
 
-  ##### Our wonderful son Jacob
+  ##### Our independent children Jacob, Beverly, Rosemarie
 
-  ![Our wonderful son Jacob](/img/jacob.jpg)
-
-  ##### Our fantastic daughter Beverly
-
-  ![Our fantastic daughter Beverly](/img/beverly.jpg)
-
-  ##### Our stupendous daughter Rosemarie
-
-  ![Our stupendous daughter Beverly](/img/rosemarie.jpg)
+  ![Our independent children Jacob, Beverly, Rosemarie](/img/soltoff-kids.jpg)
 
   ##### Our cute cat Ariel
 
   ![Our cute cat Ariel](/img/ariel.jpg)
-
 
 ---
 
