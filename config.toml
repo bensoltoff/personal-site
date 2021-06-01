@@ -31,8 +31,8 @@ enableEmoji = true
   orgName = "Benjamin Soltoff"
   orgLocal = "Chicago, IL"
   description = "Personal website for Benjamin Soltoff."
-  favicon = "/img/favicon.ico"
-  logo = "/img/blogophonic-mark-dark.png"
+  favicon = "/img/icon-32.png"
+  logo = "/img/icon-192.png"
   mainSections = ["blog", "project", "talk"]
   navallcaps = true
   # show/hide social icons in site header & footer
