@@ -1,0 +1,144 @@
+---
+title: How Good Are You At Guess Who?
+author: ''
+date: '2020-03-08'
+slug: how-good-are-you-at-guess-who
+categories:
+  - r
+tags:
+  - r
+  - riddler
+subtitle: ''
+summary: ''
+authors: []
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r settings, cache = FALSE, echo = FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+options(digits = 4)
+```
+
+The most recent [Riddler Express](https://fivethirtyeight.com/features/how-good-are-you-at-guess-who/) gave me an opportunity to refresh some base R notation, as well as combine it with a technique I learned while reading Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/). The challenge is:
+
+> A local cafe has board games on a shelf, designed to keep kids (and some adults) entertained while they wait on their food. One of the games is a tic-tac-toe board, which comes with nine pieces that you and your opponent can place: five Xs and four Os.
+> 
+> When I took my two-year-old with me, he wasn’t particularly interested in the game itself, but rather in the placement of the pieces.
+> 
+> If he randomly places all nine pieces in the nine slots on the tic-tac-toe board (with one piece in each slot), what’s the probability that X wins? That is, what’s the probability that there will be at least one occurrence of three Xs in a row at the same time there are no occurrences of three Os in a row?
+    
+My first thought was that a tic-tac-toe board can be represented as a matrix. If any of the columns or rows or diagonals of the matrix contain three Xs while simultaneously not containing any Os, X wins.
+
+I don't typically work with matrix structures in R (more often my work involves data frames), but this proved to be a nice refresher. My first approach was to simulate $N$ games of tic-tac-toe by random sampling from the set of Xs and Os. Then I remembered teaching permutations in [a statistics class last year](https://css18.github.io/probability.html#counting). Why not consider all possible outcomes and calculate the winner? There are
+
+$$\frac{n!}{(n - k)!}$$
+
+possible outcomes, where we choose $k$ objects from a set of $n$ objects. In this instance, we consider
+
+$$\frac{9!}{(9-9)!} = \frac{9!}{0!}$$
+
+where by definition $0! = 1$. So we have `r prettyNum(factorial(9), big.mark = ",")` possible outcomes. We can generate all those possible outcomes using `gtools::permutations()`. In order to use this function, each value in the vector to permute must be unique. So I represent each value uniquely, then after I generate all possible permutations represent the Xs as $+1$ and the Os as $-1$.
+
+```{r setup, cache = FALSE}
+library(tidyverse)
+set.seed(123)
+
+theme_set(theme_minimal(base_size = 18))
+```
+
+```{r pieces}
+pieces <- c(rep(1, times = 5), rep(-1, times = 4))
+all_outcomes <- gtools::permutations(n = length(pieces), r = length(pieces), v = seq_along(pieces))
+head(all_outcomes)
+
+# 1:5 = X, 6:9 = O
+all_outcomes[all_outcomes <= 5] <- 1
+all_outcomes[all_outcomes > 5] <- -1
+head(all_outcomes)
+```
+
+Next I wrote a function that takes a single permutation as its input, turns it into a matrix, and checks to see if there are three Xs in any row, column, or diagonal. Since `diag()` only returns the diagonal of a matrix and I also need to evaluate the diagonal running from bottom to top, I use the `rotate()` function[^SO] to turn the game board 90 degrees - this allows me to use the `diag()` function to obtain the same results.
+
+```{r func}
+# function to rotate a matrix 90 degrees to check the other diagonal
+rotate <- function(x) t(apply(x, 2, rev))
+
+# function to evaluate the outcome of the game
+tic_tac_toe <- function(game_board, print_board = FALSE) {
+  # generate random assortment
+  game_board <- matrix(data = game_board, nrow = 3)
+  if (print_board) print(game_board)
+
+  # check if any row or colsums or diag or inverse diag are 3
+  # if TRUE, also confirm none are -3
+  if (3 %in% colSums(game_board) ||
+    3 %in% rowSums(game_board) ||
+    sum(diag(game_board)) == 3 ||
+    sum(diag(rotate(game_board))) == 3) {
+    if (-3 %in% colSums(game_board) ||
+      -3 %in% rowSums(game_board) ||
+      sum(diag(game_board)) == -3 ||
+      sum(diag(rotate(game_board))) == -3) {
+      return("Draw")
+    }
+
+    return("X wins")
+  } else if (-3 %in% colSums(game_board) ||
+    -3 %in% rowSums(game_board) ||
+    sum(diag(game_board)) == -3 ||
+    sum(diag(rotate(game_board))) == -3) {
+    return("O wins")
+  } else {
+    return("Draw")
+  }
+}
+
+tic_tac_toe(all_outcomes[1, ], print_board = TRUE) # test the function
+```
+
+Now that I know the function works, I need to apply it to all possible outcomes. Since `all_outcomes` is structured as a matrix, an `apply()` function would be appropriate here. The problem is I have not used `apply()` in years, and I am biased towards `purrr::map()` functions. Typically `map()` cannot be used on a matrix input. However, [`purrr` includes a handy function called `array_branch()`](https://github.com/tidyverse/purrr/issues/341#issuecomment-353959893) which converts a matrix to a list object that can then be mapped over.
+
+```{r outcomes, dependson = c("pieces", "func")}
+all_outcomes <- tibble(
+  outcome = array_branch(all_outcomes, 1),
+  result = map_chr(outcome, tic_tac_toe)
+)
+all_outcomes
+```
+
+So what are the results? What is the probability X wins?
+
+```{r results, dependson = "outcomes"}
+all_outcomes_sum <- all_outcomes %>%
+  count(result) %>%
+  mutate(prop = n / sum(n))
+
+ggplot(
+  data = all_outcomes_sum,
+  mapping = aes(x = fct_reorder(result, -prop), y = prop)
+) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Probability of each outcome in tic-tac-toe",
+    x = NULL,
+    y = NULL
+  )
+```
+
+Overall, X wins approximately `r prettyNum(sum(all_outcomes$result == "X wins") / nrow(all_outcomes) * 100, digits = 3)`% of all possible matches. A draw is the next most likely outcome, whereas O's probability of success is a measly `r prettyNum(sum(all_outcomes$result == "O wins") / nrow(all_outcomes) * 100, digits = 2)`%. First-mover advantage is strong here. Of course, we also know the only winning move is not to play.
+
+{{< youtube NHWjlCaIrQo >}}
+
+[^SO]: Hat tip to [Stack Overflow](https://stackoverflow.com/a/16497058)
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```
+

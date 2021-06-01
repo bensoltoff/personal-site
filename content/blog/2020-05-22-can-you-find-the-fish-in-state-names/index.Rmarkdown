@@ -1,0 +1,233 @@
+---
+title: Can You Find The Fish In State Names?
+author: Benjamin Soltoff
+date: '2020-05-22'
+slug: can-you-find-the-fish-in-state-names
+categories:
+  - r
+tags:
+  - r
+  - riddler
+subtitle: ''
+summary: ''
+authors: []
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r settings, cache = FALSE, echo = FALSE}
+knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
+options(digits = 4)
+```
+
+The recent [Riddler classic](https://fivethirtyeight.com/features/somethings-fishy-in-the-state-of-the-riddler/) offered this intriguing challenge:
+
+> Ohio is the only state whose name doesnt share any letters with the word "mackerel." Its strange, but its true.
+> 
+> But that isnt the only pairing of a state and a word you can say that about — its not even the only fish! Kentucky has "goldfish" to itself, Montana has "jellyfish" and Delaware has "monkfish," just to name a few.
+> 
+> What is the longest "mackerel?" That is, what is the longest word that doesnt share any letters with exactly one state? (If multiple "mackerels" are tied for being the longest, can you find them all?)
+> 
+> Extra credit: Which state has the most "mackerels?" That is, which state has the most words for which it is the only state without any letters in common with those words?
+
+Given the [provided dictionary](https://norvig.com/ngrams/word.list), we need to find all the words that do not have overlapping letters with state names (specifically, **mackerels** are ones with exactly one state with which it does not share letters).
+
+In order to do that, I tokenized each word at the character-level, then compared the list of dictionary words to all the state names to find all non-overlapping pairs of words.
+
+```{r packages, cache = FALSE}
+library(tidyverse)
+library(tidytext)
+
+theme_set(theme_minimal(base_size = 18))
+```
+
+First we retrieve the dictionary of words. R already includes state names as the `state.name` constant.
+
+```{r get-words}
+# get list of words
+all_words <- tibble(word = readLines("https://norvig.com/ngrams/word.list"))
+states <- tibble(word = state.name)
+```
+
+Next I use `tidytext::unnest_tokens()` to tokenize at the character level. Since it doesn't matter how many times the word uses a specific character, I just need each distinct appearance.[^lowercase] From here I `nest()` the data frame so each word is a row and all their unique characters are in separate characte vectors.
+
+```{r tokenize, dependson = "get-words"}
+# combine together
+tokens <- bind_rows(
+  all_words = all_words,
+  states = states,
+  .id = "source"
+) %>%
+  # tokenize by character
+  unnest_tokens(
+    output = letter,
+    input = word,
+    token = "characters",
+    drop = FALSE
+  ) %>%
+  # remove duplicates
+  distinct() %>%
+  # store data as one row per word and all unique letters as character vectors
+  nest(cols = c(letter)) %>%
+  mutate(letters = map(cols, ~ .$letter)) %>%
+  select(-cols) %>%
+  # split by source
+  group_split(source, keep = FALSE)
+tokens
+```
+
+From here, I need to form all possible combinations between each dictionary word and state name. `expand.grid()` lets me form all possible combinations, while a couple of `left_join()` operations bring together all the character tokens.
+
+```{r combo, dependson = "tokenize"}
+# form all possible cominations of the dictionary and state names
+tokens_combo <- expand.grid(
+  word_all = tokens[[1]]$word,
+  word_state = tokens[[2]]$word
+) %>%
+  left_join(tokens[[1]], by = c("word_all" = "word")) %>%
+  rename(letters_all = letters) %>%
+  left_join(tokens[[2]], by = c("word_state" = "word")) %>%
+  rename(letters_state = letters) %>%
+  as_tibble()
+tokens_combo
+```
+
+The tricky part was finding the correct syntax to check all the characters in the dictionary word individually -- if any of the letters could be found in the state name, we did not have a valid match. Combining `%in%` with the `any()` function allows us to do just that.
+
+```{r not-in-common, dependson = "combo"}
+# only keep rows where the dictionary word does not have any letters in common
+# with the state name
+words_not_in_common <- tokens_combo %>%
+  mutate(any_letters_in_common = map2_lgl(letters_all,
+                                          letters_state,
+                                          ~ any(.x %in% .y == TRUE))) %>%
+  filter(!any_letters_in_common)
+```
+
+Turns out that even with millions of pairs to iterate through, it only took about 40 seconds to complete the comparisons on my computer.
+
+From here, we just need to find all the mackerels and check their word length.
+
+```{r unique-mackerel, dependson = "not-in-common"}
+# check to see if a word has multiple mackerels
+mackerels <- words_not_in_common %>%
+  count(word_all) %>%
+  # only keep words with a single mackerel
+  filter(n == 1) %>%
+  # what are their length?
+  left_join(words_not_in_common) %>%
+  mutate(length = map_dbl(word_all, nchar)) %>%
+  select(-starts_with("letters"), -any_letters_in_common) %>%
+  arrange(-length)
+
+# what are the longest mackerels?
+mackerels %>%
+  filter(length == max(length)) %>%
+  knitr::kable(col.names = c(
+    "Word", "Number of mackerels",
+    "State", "Word length"
+  ))
+```
+
+`r filter(mackerels, length == max(length)) %>% nrow()` words tie for the longest mackerel at `r max(mackerels$length)` characters each.
+
+As for the extra credit, which states have the most mackerels? Given what we already calculated, let's instead aggregate total number of mackerels for each state.
+
+```{r extra-credit, dependson = "unique-mackerel", fig.height = 10}
+# join with states info
+state_mackerels <- mackerels %>%
+  count(word_state) %>%
+  # add back in states which have no mackerels
+  full_join(states, by = c("word_state" = "word")) %>%
+  mutate(n = ifelse(is.na(n), 0, n)) %>%
+  arrange(-n, word_state)
+
+ggplot(
+  data = state_mackerels,
+  mapping = aes(
+    x = factor(word_state, levels = word_state) %>% fct_rev(),
+    y = n
+  )
+) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Number of mackerels by state",
+    x = NULL,
+    y = "Number of mackerels"
+  )
+```
+
+Ohio is the clear winner; rounding out the top four are Alabama, Utah, and Mississippi.
+
+```{r, eval = FALSE, include = FALSE}
+letter_dist <- tokens[[1]] %>%
+  unnest(letters) %>%
+  count(letters) %>%
+  mutate(vowel = letters %in% c("a", "e", "i", "o", "u"),
+         letters = parse_factor(letters, levels = letters))
+
+ggplot(data = letter_dist, mapping = aes(x = letters, y = n)) +
+  geom_col() +
+  geom_col(data = filter(letter_dist, vowel), fill = "blue") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Distribution of letter usage in English words",
+    subtitle = "Only distinct appearances",
+    x = NULL,
+    y = "Number of words"
+  )
+
+words_not_in_common %>%
+  count(word_all) %>%
+  # only keep words with a single mackerel
+  filter(n == 1) %>%
+  # what are their length?
+  left_join(words_not_in_common) %>%
+  mutate(length = map_dbl(letters_all, length)) %>%
+  filter(word_state %in% state_mackerels$word_state[1:5]) %>%
+  unnest(letters_all) %>%
+  count(word_state, letters_all) %>%
+  mutate(vowel = letters_all %in% c("a", "e", "i", "o", "u"),
+         letters_all = parse_factor(letters_all, levels = letters)) %>%
+  ggplot(mapping = aes(x = letters_all, y = n)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::comma) +
+  facet_grid(word_state ~ ., scales = "free_y") +
+  labs(
+    title = "Distribution of letter usage in English words",
+    subtitle = "Only distinct appearances",
+    x = NULL,
+    y = "Number of words"
+  )
+
+letter_tf_idf <- bind_rows(all_words = all_words,
+                    states = states,
+                    .id = "source") %>%
+  # tokenize by character
+  unnest_tokens(output = letter, input = word, token = "characters", drop = FALSE) %>%
+  # get frequency count of letters in each word
+  count(source, word, letter) %>%
+  bind_tf_idf(term = letter, document = word, n = n) %>%
+  group_by(source, letter) %>%
+  summarize(tf_idf_mean = mean(tf_idf),
+            tf_idf_err = sd(tf_idf) / n())
+
+ggplot(data = letter_tf_idf,
+       mapping = aes(x = letter, y = tf_idf_mean, color = source)) +
+  geom_pointrange(mapping = aes(ymin = tf_idf_mean - 2 * tf_idf_err,
+                                ymax = tf_idf_mean + 2 * tf_idf_err),
+                  position = position_dodge(width = 1)) +
+  theme(legend.position = "bottom")
+```
+
+[^lowercase]: `unnest_tokens()` automatically converts the text to lowercase, so I don't need to convert `state.name` first.
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```
