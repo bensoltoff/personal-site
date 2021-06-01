@@ -3,7 +3,10 @@ title: Valuing Timeouts in Football
 author: ''
 date: '2016-01-13'
 slug: valuing-timeouts-in-football
-aliases: ["/r/valuing-timeouts-in-football/"]
+aliases: [
+  "/r/valuing-timeouts-in-football/",
+  "/post/valuing-timeouts-in-football/"
+]
 categories:
   - r
 tags:

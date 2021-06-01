@@ -3,6 +3,7 @@ title: Can You Find The Fish In State Names?
 author: Benjamin Soltoff
 date: '2020-05-22'
 slug: can-you-find-the-fish-in-state-names
+alias: ["/post/can-you-find-the-fish-in-state-names/"]
 categories:
   - r
 tags:
@@ -291,7 +292,7 @@ devtools::session_info()
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2021-05-31                  
+##  date     2021-06-01                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
 ##  package     * version date       lib source        

@@ -3,7 +3,10 @@ title: The Forrest Bounce and Its Effect on Triple Stumpers
 author: ''
 date: '2014-03-13'
 slug: the-forrest-bounce-and-its-effect-on-triple-stumpers
-aliases: ["/r/the-forrest-bounce-and-its-effect-on-triple-stumpers/"]
+aliases: [
+  "/r/the-forrest-bounce-and-its-effect-on-triple-stumpers/",
+  "/post/the-forrest-bounce-and-its-effect-on-triple-stumpers/"
+]
 categories:
   - r
 tags:

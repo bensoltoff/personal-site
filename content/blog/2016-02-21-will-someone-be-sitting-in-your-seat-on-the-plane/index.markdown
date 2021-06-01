@@ -3,7 +3,10 @@ title: Will Someone Be Sitting In Your Seat On The Plane?
 author: ''
 date: '2016-02-21'
 slug: will-someone-be-sitting-in-your-seat-on-the-plane
-aliases: ["/r/will-someone-be-sitting-in-your-seat-on-the-plane/"]
+aliases: [
+  "/r/will-someone-be-sitting-in-your-seat-on-the-plane/",
+  "/post/will-someone-be-sitting-in-your-seat-on-the-plane/",
+  ]
 categories:
   - r
 tags:
@@ -63,7 +66,7 @@ We can in fact be a bit more precise. As long as you are not one of the last 10 
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2021-05-31                  
+##  date     2021-06-01                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
 ##  package     * version date       lib source        
@@ -77,7 +80,6 @@ We can in fact be a bit more precise. As long as you are not one of the last 10 
 ##  callr         3.7.0   2021-04-20 [1] CRAN (R 4.0.2)
 ##  cellranger    1.1.0   2016-07-27 [1] CRAN (R 4.0.0)
 ##  cli           2.5.0   2021-04-26 [1] CRAN (R 4.0.2)
-##  codetools     0.2-18  2020-11-04 [1] CRAN (R 4.0.4)
 ##  colorspace    2.0-1   2021-05-04 [1] CRAN (R 4.0.2)
 ##  crayon        1.4.1   2021-02-08 [1] CRAN (R 4.0.2)
 ##  DBI           1.1.1   2021-01-15 [1] CRAN (R 4.0.2)
@@ -89,7 +91,6 @@ We can in fact be a bit more precise. As long as you are not one of the last 10 
 ##  ellipsis      0.3.2   2021-04-29 [1] CRAN (R 4.0.2)
 ##  evaluate      0.14    2019-05-28 [1] CRAN (R 4.0.0)
 ##  fansi         0.4.2   2021-01-15 [1] CRAN (R 4.0.2)
-##  farver        2.1.0   2021-02-28 [1] CRAN (R 4.0.2)
 ##  fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.0.2)
 ##  forcats     * 0.5.1   2021-01-27 [1] CRAN (R 4.0.2)
 ##  fs            1.5.0   2020-07-31 [1] CRAN (R 4.0.2)
@@ -99,24 +100,18 @@ We can in fact be a bit more precise. As long as you are not one of the last 10 
 ##  gtable        0.3.0   2019-03-25 [1] CRAN (R 4.0.0)
 ##  haven         2.4.1   2021-04-23 [1] CRAN (R 4.0.2)
 ##  here          1.0.1   2020-12-13 [1] CRAN (R 4.0.2)
-##  highr         0.9     2021-04-16 [1] CRAN (R 4.0.2)
 ##  hms           1.1.0   2021-05-17 [1] CRAN (R 4.0.4)
 ##  htmltools     0.5.1.1 2021-01-22 [1] CRAN (R 4.0.2)
 ##  httr          1.4.2   2020-07-20 [1] CRAN (R 4.0.2)
 ##  jquerylib     0.1.4   2021-04-26 [1] CRAN (R 4.0.2)
 ##  jsonlite      1.7.2   2020-12-09 [1] CRAN (R 4.0.2)
 ##  knitr         1.33    2021-04-24 [1] CRAN (R 4.0.2)
-##  labeling      0.4.2   2020-10-20 [1] CRAN (R 4.0.2)
-##  lattice       0.20-44 2021-05-02 [1] CRAN (R 4.0.2)
 ##  lifecycle     1.0.0   2021-02-15 [1] CRAN (R 4.0.2)
 ##  lubridate     1.7.10  2021-02-26 [1] CRAN (R 4.0.2)
 ##  magrittr      2.0.1   2020-11-17 [1] CRAN (R 4.0.2)
-##  Matrix        1.3-3   2021-05-04 [1] CRAN (R 4.0.2)
 ##  memoise       2.0.0   2021-01-26 [1] CRAN (R 4.0.2)
-##  mgcv          1.8-35  2021-04-18 [1] CRAN (R 4.0.2)
 ##  modelr        0.1.8   2020-05-19 [1] CRAN (R 4.0.0)
 ##  munsell       0.5.0   2018-06-12 [1] CRAN (R 4.0.0)
-##  nlme          3.1-152 2021-02-04 [1] CRAN (R 4.0.4)
 ##  pillar        1.6.1   2021-05-16 [1] CRAN (R 4.0.4)
 ##  pkgbuild      1.2.0   2020-12-15 [1] CRAN (R 4.0.2)
 ##  pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.0.0)

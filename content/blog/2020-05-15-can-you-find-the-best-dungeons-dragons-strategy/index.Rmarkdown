@@ -3,6 +3,7 @@ title: Can You Find The Best Dungeons & Dragons Strategy?
 author: Benjamin Soltoff
 date: '2020-05-15'
 slug: can-you-find-the-best-dungeons-dragons-strategy
+alias: ["/post/can-you-find-the-best-dungeons-dragons-strategy/"]
 categories:
   - r
 tags:

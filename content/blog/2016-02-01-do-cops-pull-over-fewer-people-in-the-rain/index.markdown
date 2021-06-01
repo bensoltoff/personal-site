@@ -3,7 +3,10 @@ title: Do Cops Pull Over Fewer People in the Rain?
 author: ''
 date: '2016-02-01'
 slug: do-cops-pull-over-fewer-people-in-the-rain
-aliases: ["/r/do-cops-pull-over-fewer-people-in-the-rain/"]
+aliases: [
+  "/r/do-cops-pull-over-fewer-people-in-the-rain/",
+  "/post/do-cops-pull-over-fewer-people-in-the-rain/"
+  ]
 categories:
   - r
 tags:

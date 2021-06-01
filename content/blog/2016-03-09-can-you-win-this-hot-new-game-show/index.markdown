@@ -3,7 +3,10 @@ title: Can You Win This Hot New Game Show?
 author: ''
 date: '2016-03-09'
 slug: can-you-win-this-hot-new-game-show
-aliases: ["/r/can-you-win-this-hot-new-game-show/"]
+aliases: [
+  "/r/can-you-win-this-hot-new-game-show/",
+  "/post/can-you-win-this-hot-new-game-show/",
+  ]
 categories:
   - r
 tags:
@@ -286,7 +289,7 @@ devtools::session_info()
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/Chicago             
-##  date     2021-05-31                  
+##  date     2021-06-01                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
 ##  package     * version date       lib source        
@@ -297,7 +300,6 @@ devtools::session_info()
 ##  cachem        1.0.5   2021-05-15 [1] CRAN (R 4.0.2)
 ##  callr         3.7.0   2021-04-20 [1] CRAN (R 4.0.2)
 ##  cli           2.5.0   2021-04-26 [1] CRAN (R 4.0.2)
-##  codetools     0.2-18  2020-11-04 [1] CRAN (R 4.0.4)
 ##  colorspace    2.0-1   2021-05-04 [1] CRAN (R 4.0.2)
 ##  crayon        1.4.1   2021-02-08 [1] CRAN (R 4.0.2)
 ##  DBI           1.1.1   2021-01-15 [1] CRAN (R 4.0.2)
@@ -308,7 +310,6 @@ devtools::session_info()
 ##  ellipsis      0.3.2   2021-04-29 [1] CRAN (R 4.0.2)
 ##  evaluate      0.14    2019-05-28 [1] CRAN (R 4.0.0)
 ##  fansi         0.4.2   2021-01-15 [1] CRAN (R 4.0.2)
-##  farver        2.1.0   2021-02-28 [1] CRAN (R 4.0.2)
 ##  fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.0.2)
 ##  fs            1.5.0   2020-07-31 [1] CRAN (R 4.0.2)
 ##  generics      0.1.0   2020-10-31 [1] CRAN (R 4.0.2)
@@ -316,12 +317,10 @@ devtools::session_info()
 ##  glue          1.4.2   2020-08-27 [1] CRAN (R 4.0.2)
 ##  gtable        0.3.0   2019-03-25 [1] CRAN (R 4.0.0)
 ##  here          1.0.1   2020-12-13 [1] CRAN (R 4.0.2)
-##  highr         0.9     2021-04-16 [1] CRAN (R 4.0.2)
 ##  htmltools     0.5.1.1 2021-01-22 [1] CRAN (R 4.0.2)
 ##  jquerylib     0.1.4   2021-04-26 [1] CRAN (R 4.0.2)
 ##  jsonlite      1.7.2   2020-12-09 [1] CRAN (R 4.0.2)
 ##  knitr         1.33    2021-04-24 [1] CRAN (R 4.0.2)
-##  labeling      0.4.2   2020-10-20 [1] CRAN (R 4.0.2)
 ##  lifecycle     1.0.0   2021-02-15 [1] CRAN (R 4.0.2)
 ##  magrittr    * 2.0.1   2020-11-17 [1] CRAN (R 4.0.2)
 ##  memoise       2.0.0   2021-01-26 [1] CRAN (R 4.0.2)
@@ -339,7 +338,6 @@ devtools::session_info()
 ##  rlang         0.4.11  2021-04-30 [1] CRAN (R 4.0.2)
 ##  rmarkdown     2.8     2021-05-07 [1] CRAN (R 4.0.2)
 ##  rprojroot     2.0.2   2020-11-15 [1] CRAN (R 4.0.2)
-##  rstudioapi    0.13    2020-11-12 [1] CRAN (R 4.0.2)
 ##  sass          0.4.0   2021-05-12 [1] CRAN (R 4.0.2)
 ##  scales        1.1.1   2020-05-11 [1] CRAN (R 4.0.0)
 ##  sessioninfo   1.1.1   2018-11-05 [1] CRAN (R 4.0.0)
