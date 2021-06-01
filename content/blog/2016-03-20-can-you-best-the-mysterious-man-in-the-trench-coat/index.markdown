@@ -21,18 +21,18 @@ image:
   focal_point: ''
   preview_only: no
 projects: []
-math: false
 ---
 
 
 
 The latest [Riddler puzzle on FiveThirtyEight](http://fivethirtyeight.com/features/can-you-best-the-mysterious-man-in-the-trench-coat/):
 
-> A man in a trench coat approaches you and pulls an envelope from his pocket. He tells you that it contains a sum of money in bills, anywhere from $1 up to $1,000. He says that if you can guess the exact amount, you can keep the money. After each of your guesses he will tell you if your guess is too high, or too low. But! You only get nine tries. *What should your first guess be to maximize your expected winnings?*
+> A man in a trench coat approaches you and pulls an envelope from his pocket. He tells you that it contains a sum of money in bills, anywhere from <span>$</span>1 up to <span>$</span>1,000. He says that if you can guess the exact amount, you can keep the money. After each of your guesses he will tell you if your guess is too high, or too low. But! You only get nine tries. *What should your first guess be to maximize your expected winnings?*
 
-My solution is based on a basic, yet elegant, strategy. The first guess can be selected arbitrarily between $1 and $1000 - let's say here that my first guess is $500. If my guess is correct, then I win (yay!). But since I have just a 1 in 1000 probability of guessing correctly on the first try, I'm probably not done. So if the trenchcoat man says the actual value is higher, my next guess will be the midway point between my first guess and the maximum possible value. Initially, this will be $1000. If the trenchcoat man says the actual value is lower, my next guess will be the midway point between my first guess and the minimum possible value ($1).
+My solution is based on a basic, yet elegant, strategy. The first guess can be selected arbitrarily between <span>$</span>1 and <span>$</span>1000 - let's say here that my first guess is <span>$</span>
+500. If my guess is correct, then I win (yay!). But since I have just a 1 in 1000 probability of guessing correctly on the first try, I'm probably not done. So if the trenchcoat man says the actual value is higher, my next guess will be the midway point between my first guess and the maximum possible value. Initially, this will be <span>$</span>1000. If the trenchcoat man says the actual value is lower, my next guess will be the midway point between my first guess and the minimum possible value (<span>$</span>1).
 
-So let's say my guess is too low and the actual value is higher. My second guess would be $750. If I'm correct, I win. If the actual amount is lower, my next guess will be the midpoint between $500 and $750 - remember that I now know it must be within this range.
+So let's say my guess is too low and the actual value is higher. My second guess would be <span>$</span>750. If I'm correct, I win. If the actual amount is lower, my next guess will be the midpoint between <span>$</span>500 and <span>$</span>750 - remember that I now know it must be within this range.
 
 I can iterate through this process with up to 9 guesses. At that point, if I still have not guessed the amount, I lose.
 
@@ -89,7 +89,7 @@ guess_money <- function(actual, initial, n_tries = 9,
 }
 ```
 
-As an example, let's say the actual amount of money is $736 and my first guess is $500. Here's how that would play out:
+As an example, let's say the actual amount of money is <span>$</span>736 and my first guess is <span>$</span>500. Here's how that would play out:
 
 
 ```r
@@ -115,7 +115,7 @@ guess_money(actual = 736, initial = 500, print_guess = TRUE)
 
 This tells me the different guesses, as well as the fact that I eventually won (win = 1) in the ninth round.
 
-Of course, there is no reason why I have to choose $500 for my initial guess. What if I instead started at $1?
+Of course, there is no reason why I have to choose <span>$</span>500 for my initial guess. What if I instead started at <span>$</span>1?
 
 
 ```r
@@ -262,7 +262,7 @@ ggplot(exp_val, aes(guess, exp_val)) +
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/exp_val-1.png" width="672" />
 
-So if you get up to nine guesses, your first guess should be $744. Why is it not $500? Shouldn't that be optimal, since it minimizes the potential range of values for which you'll need to initially account? Well, not quite.
+So if you get up to nine guesses, your first guess should be <span>$</span>744. Why is it not <span>$</span>500? Shouldn't that be optimal, since it minimizes the potential range of values for which you'll need to initially account? Well, not quite.
 
 There are a range of initial guesses that provide you the same overall win rate.
 
@@ -283,7 +283,7 @@ both %>%
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/win_rate-1.png" width="672" />
 
-The win rate for initially guessing $300 is the same as for initially guessing $600 - 51.1%. However the expected value for initially guessing $300 is just $204, compared to initially guessing $600 ($281). Which actual values can you win before you run out of attempts?
+The win rate for initially guessing <span>$</span>300 is the same as for initially guessing <span>$</span>600 - 51.1%. However the expected value for initially guessing <span>$</span>300 is just <span>$</span>204, compared to initially guessing <span>$</span>600 ($281). Which actual values can you win before you run out of attempts?
 
 
 ```r
@@ -437,9 +437,9 @@ ggplot(tries_all_exp, aes(guess, win_rate,
 
 11 is the minimum number of guesses needed to guarantee victory.
 
-## Update 2: $744 or $745?
+## Update 2: <span>$</span>744 or <span>$</span>745?
 
-[Others](http://somedisagree.com/2016/03/20/the-538-riddlerweird-guy-in-trench-coat/) have found the optimal starting guess to be $745. This discrepancy is based on how you round each guess. The default `R` approach to rounding [is complicated](https://ironholds.org/projects/rbitrary/#why-doesnt-round-work-like-you-think-it-should), but adheres to international standards.
+[Others](http://somedisagree.com/2016/03/20/the-538-riddlerweird-guy-in-trench-coat/) have found the optimal starting guess to be <span>$</span>745. This discrepancy is based on how you round each guess. The default `R` approach to rounding [is complicated](https://ironholds.org/projects/rbitrary/#why-doesnt-round-work-like-you-think-it-should), but adheres to international standards.
 
 ### Original rounding method
 
