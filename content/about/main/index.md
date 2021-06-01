@@ -6,7 +6,7 @@ use_featured: false # if false, use most recent by date
 number_categories: 3 # set to zero to exclude
 show_intro: true
 intro: |
-  I am originally from Northern Virginia. After graduating from [James Madison University](https://www.jmu.edu/), I pursued my PhD in political science from [The Pennsylvania State University](https://www.psu.edu/). I am now an assistant instructional professor in computational social science and the assistant director of the Masters in Computational Social Science at the [University of Chicago](https://macss.uchicago.edu/).
+  I am originally from Northern Virginia. After graduating from [James Madison University](https://www.jmu.edu/), I pursued my PhD in political science from [The Pennsylvania State University](https://www.psu.edu/). I am now a computational social scientist and instructor at the [University of Chicago](https://www.uchicago.edu).
 
   My research focused on state judicial politics and utilized machine learning and text analysis to analyze agenda-setting behavior on state courts of last resort, including judicial selection/retention, institutional structure, and case selection under discretionary jurisdiction.
 
@@ -16,23 +16,23 @@ intro: |
   
   ## Personal
 
-  * My amazing wife Amanda
+  ##### My amazing wife Amanda
 
   ![My amazing wife Amanda](/img/ben-amanda.jpg)
 
-  * Our wonderful son Jacob
+  ##### Our wonderful son Jacob
 
   ![Our wonderful son Jacob](/img/jacob.jpg)
 
-  * Our fantastic daughter Beverly
+  ##### Our fantastic daughter Beverly
 
   ![Our fantastic daughter Beverly](/img/beverly.jpg)
 
-  * Our stupendous daughter Rosemarie
+  ##### Our stupendous daughter Rosemarie
 
   ![Our stupendous daughter Beverly](/img/rosemarie.jpg)
 
-  * Our cute cat Ariel
+  ##### Our cute cat Ariel
 
   ![Our cute cat Ariel](/img/ariel.jpg)
 
