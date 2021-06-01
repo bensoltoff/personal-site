@@ -41,7 +41,7 @@ enableEmoji = true
   socialInFooter = false
   # Default image for social sharing and search engines.
   # Place image file in `static` folder and specify image name here.
-  sharing_image = "/img/papillons.jpg"
+  sharing_image = ""
   # Twitter username (without @). Used when a visitor shares your site on Twitter.
   twitter = "soltoffbc"
 
@@ -121,11 +121,6 @@ enableEmoji = true
     title = "Talks"
     url = "/talk/"
     weight = 4
-  [[menu.header]]
-    name = "Contact"
-    title = "Contact me"
-    url = "/Contact/"
-    weight = 5
 
   # Configure footer
   [[menu.footer]]
@@ -135,14 +130,9 @@ enableEmoji = true
     weight = 1
   [[menu.footer]]
     name = "Contact"
-    title = "Contact form"
+    title = "Contact me"
     url = "/contact/"
     weight = 2
-  [[menu.footer]]
-    name = "Contributors"
-    title = "Contributors"
-    url = "/contributors/"
-    weight = 3
 
 # see https://gohugo.io/about/hugo-and-gdpr/
 [privacy]
