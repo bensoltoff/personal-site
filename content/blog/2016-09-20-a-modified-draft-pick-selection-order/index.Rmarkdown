@@ -1,0 +1,83 @@
+---
+title: A Modified Draft Pick Selection Order
+author: ''
+date: '2016-09-20'
+slug: a-modified-draft-pick-selection-order
+aliases: [
+  "/r/expected-draft-pick/",
+  "/post/a-modified-draft-pick-selection-order/",
+  ]
+categories:
+  - r
+tags:
+  - r
+  - riddler
+subtitle: ''
+summary: ''
+authors: []
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r settings, cache = FALSE, echo = FALSE}
+knitr::opts_chunk$set(cache = TRUE, warning = FALSE, message = FALSE)
+options(digits = 3)
+```
+
+In preparation for teaching a [new computing course for the social sciences](https://cfss.uchicago.edu), I've been practicing building interactive websites using [Shiny](http://shiny.rstudio.com/) for R. The [latest Riddler puzzle from FiveThirtyEight](http://fivethirtyeight.com/features/how-high-can-count-von-count-count/) was an especially interesting challenge, combining aspects of computational simulation and Shiny programing:
+
+> You are one of 30 team owners in a professional sports league. In the past, your league set the order for its annual draft using the teams’ records from the previous season — the team with the worst record got the first draft pick, the team with the second-worst record got the next pick, and so on. However, due to concerns about teams intentionally losing games to improve their picks, the league adopts a modified system. This year, each team tosses a coin. All the teams that call their coin toss correctly go into Group A, and the teams that lost the toss go into Group B. All the Group A teams pick before all the Group B teams; within each group, picks are ordered in the traditional way, from worst record to best. If your team would have picked 10th in the old system, what is your expected draft position under the new system?
+    
+> Extra credit: Suppose each team is randomly assigned to one of T groups where all the teams in Group 1 pick, then all the teams in Group 2, and so on. (The coin-flipping scenario above is the case where T = 2.) What is the expected draft position of the team with the Nth-best record?
+
+One could go the analytical route to solve this
+
+{{< tweet 778056486593454080 >}}
+
+But I wanted to take a computational, brute-force approach. This type of problem is ripe for Markov chain Monte Carlo (MCMC) methods, which I've use before in [Riddler solutions](http://www.bensoltoff.com/r/can-you-win-this-hot-new-game-show/).
+
+The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of $K$ groups. The function I wrote is:
+
+```{r, messages = FALSE}
+library(tidyverse)
+
+draft_pick_sim <- function(n_teams = 30, n_groups = 2, n_sims = 100){
+  old <- 1:n_teams
+
+  sims <- replicate(n_sims, sample(1:n_groups, n_teams, replace = T)) %>%
+    as_tibble(.name_repair = "unique") %>%
+    bind_cols(tibble(old)) %>%
+    gather(sim, outcome, -old) %>%
+    group_by(sim) %>%
+    arrange(sim, outcome, old) %>%
+    mutate(new = row_number())
+  
+  return(sims)
+}
+```
+
+For each simulation, I randomly sample each team into one of `n_groups`, then calculate draft order from worst-to-first within each group and then between groups. From this I can then calculate the expected draft position for each team given their original draft order.
+
+So given the original problem setup, the expected draft positions for each team given random assignment into one of two groups is:
+
+```{r}
+draft_pick_sim(n_sims = 10000) %>%
+  group_by(old) %>%
+  summarize(mean = mean(new)) %>%
+  knitr::kable(caption = "Expected Draft Position (based on 10,000 simulations)",
+               col.names = c("Original Draft Position",
+                             "Expected Draft Position"))
+```
+
+The team originally with the 10th draft can expect to have the *13th pick* under this new approach.
+
+What turned into the more complicated part was turning this function into a working Shiny app. [I encourage you to try it out](https://bensoltoff.shinyapps.io/draft_pick/), as it generalizes the problem by providing expected draft picks given $N$ teams and $K$ groups.
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```

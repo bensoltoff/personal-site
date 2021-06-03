@@ -1,0 +1,91 @@
+---
+title: How Many More Palindrome Dates Will You See?
+author: ''
+date: '2020-02-08'
+slug: how-many-more-palindrome-dates-will-you-see
+alias: ["/post/how-many-more-palindrome-dates-will-you-see/"]
+categories:
+  - r
+tags:
+  - r
+  - riddler
+subtitle: ''
+summary: ''
+authors: []
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r settings, cache = FALSE, echo = FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+options(digits = 4)
+```
+
+I'm currently on paternity leave and in search of quick but interesting programming challenges to stay fresh. The [latest Riddler Express](https://fivethirtyeight.com/features/how-many-more-palindrome-dates-will-you-see/) provided a quick refresher on string manipulation.
+
+> If we write out dates in the American format of MM/DD/YYYY (i.e., the two digits of the month, followed by the two digits of the day, followed by the four digits of the year), how many more palindromic dates will there be this century?
+
+The trick is to create a sequence of all remaining dates in the century, store them as character strings in `MM/DD/YYYY` format, then reverse each string. If the string is equal to its reverse, it's a palindrome.
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(knitr)
+
+palindrome_usa <- tibble(
+  # generate sequence of dates
+  date = seq(from = mdy("02/03/2020"), to = mdy("12/31/2100"), by = "1 day"),
+  # convert to character string
+  date_char = date %>%
+    format('%m-%d-%Y') %>%
+    as.character() %>%
+    # remove hyphens
+    str_remove_all(pattern = "-"),
+  # reverse the string and compare to original
+  date_rev = stringi::stri_reverse(date_char),
+  palindrome = date_char == date_rev
+) %>%
+  # which dates are palindromes
+  filter(palindrome)
+kable(palindrome_usa)
+```
+
+Only `r nrow(palindrome_usa)` palindrome dates remaining. Out of curiosity, do any exist using the European `DD/MM/YYYY` format?
+
+```{r}
+palindrome_eur <- tibble(
+  # generate sequence of dates
+  date = seq(from = mdy("02/03/2020"), to = mdy("12/31/2100"), by = "1 day"),
+  # convert to character string
+  date_char = date %>%
+    format('%d-%m-%Y') %>%
+    as.character() %>%
+    # remove hyphens
+    str_remove_all(pattern = "-"),
+  # reverse the string and compare to original
+  date_rev = stringi::stri_reverse(date_char),
+  palindrome = date_char == date_rev
+) %>%
+  # which dates are palindromes
+  filter(palindrome)
+kable(palindrome_eur)
+```
+
+A lot more thanks to the reversed positioning of the month and date.
+
+Is there any overlap between the two? That is, like `02/02/2020` and `02/02/2020`, are there any palindromic dates under both formats?
+
+```{r}
+semi_join(palindrome_usa, palindrome_eur, by = "date")
+```
+
+Nope.
+
+## Session Info
+
+```{r child = here::here("R", "_session-info.Rmd")}
+```
