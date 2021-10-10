@@ -12,7 +12,7 @@ tags:
 
 
 
-Today's [Riddler Express](https://fivethirtyeight.com/features/can-you-bake-the-radish-pie/) was an interesting application of sequences and convergence:^[Fresh on my mind from a math camp I've been teaching the past three weeks.]
+Today's [Riddler Express](https://fivethirtyeight.com/features/can-you-bake-the-radish-pie/) was an interesting application of sequences and convergence:[^math-camp]
 
 > I recently came across a rather peculiar recipe for something called Babylonian radish pie. Intrigued, I began to follow the directions, which said I could start with any number of cups of flour.
 >
@@ -149,4 +149,4 @@ flour_trials %>%
 
 All the trials converged to the same estimate of 1.7321 give or take three decimal places.
 
-
+[^math-camp]: Fresh on my mind from a math camp I've been teaching the past three weeks.
