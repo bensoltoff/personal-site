@@ -1,0 +1,115 @@
+---
+title: More Menorah Math!
+author: Benjamin Soltoff
+date: '2021-12-15'
+slug: more-menorah-math
+categories:
+  - R
+tags:
+  - r
+  - riddler
+subtitle: ''
+draft: no
+series: ~
+layout: single
+---
+
+```{r settings, cache = FALSE, echo = FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+options(digits = 4)
+```
+
+This week's [Riddler Express](https://fivethirtyeight.com/features/can-you-slice-the-ice/) deals with some menorah math that provides a good application for combinatorics:
+
+> Tonight marks the sixth night of Hanukkah, which means it's time for some more Menorah Math!
+> 
+> I have a most peculiar menorah. Like most menorahs, it has nine total candles — a central candle, called the shamash, four to the left of the shamash and another four to the right. But unlike most menorahs, the eight candles on either side of the shamash are numbered. The two candles adjacent to the shamash are both "1," the next two candles out from the shamash are "2," the next pair are "3," and the outermost pair are "4."
+> 
+> The shamash is always lit. How many ways are there to light the remaining eight candles so that sums on either side of the menorah are "balanced"? (For example, one such way is to light candles 1 and 4 on one side and candles 2 and 3 on the other side. In this case, the sums on both sides are 5, so the menorah is balanced.)
+
+In this problem, we need to identify all the possible combinations of lighting each of the four sets of candles such that each side has the same number of candles lit.
+
+We could do this by hand, but R has the handy `combn()` function for generating all combinations of a set of elements. For example, if we wanted all combinations of choosing three candles we could write:
+
+```{r pkg, cache = FALSE}
+library(tidyverse)
+```
+
+```{r}
+combn(x = 4, m = 3)
+```
+
+In this problem we could choose $[0, 1, 2, 3, 4]$ candles from each side. So we need to find all possible combinations for each of those quantities. `combn()` can only be used with a single `m` value. To vectorize the operation, I leveraged the `map()` function from [`purrr`](https://purrr.tidyverse.org/).
+
+```{r}
+tibble(
+  m = 0:4,
+  combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)
+)
+```
+
+Since the number of possible combinations varies for each `m`, we need to expand the `combinations` column so the data frame is one row per combination. `tidyr::unnest_longer()` serves that purpose.
+
+```{r}
+tibble(
+  m = 0:4,
+  combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)
+) %>%
+  unnest_longer(combinations)
+```
+
+Now the `combinations` column is a list-column, where every element is a numeric vector identifying which candles are lit in this scenario. To calculate the sum of the candles based on their position, we need to add together the index values stored within these vectors.
+
+```{r}
+tibble(
+  m = 0:4,
+  combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)
+) %>%
+  unnest_longer(combinations) %>%
+  mutate(candle_sum = map_dbl(.x = combinations, .f = sum))
+```
+
+From here, we calculate how many times each unique sum appears in the data frame.
+
+```{r}
+tibble(
+  m = 0:4,
+  combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)
+) %>%
+  unnest_longer(combinations) %>%
+  mutate(candle_sum = map_dbl(.x = combinations, .f = sum)) %>%
+  count(candle_sum)
+```
+
+For the rows with `n` values of 1, there is only one possible way to achieve that sum. However for rows with `n` values of `2`, there are two possible combinations that achieve that sum. For example, candles 1 and 2 can be lit to achieve a sum of 3, as well as simply lighting candle 3. Since either side could be lit using these combinations, that actually leaves four ways (i.e. $2^2$) to achieve that equal weighting. So all we need to do is sum up the square of each value in the `n` column to determine the total number of ways to light each side such that they are "balanced".
+
+```{r}
+tibble(
+  m = 0:4,
+  combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)
+) %>%
+  unnest_longer(combinations) %>%
+  mutate(candle_sum = map_dbl(.x = combinations, .f = sum)) %>%
+  count(candle_sum) %>%
+  summarize(sum(n^2))
+```
+
+```{r include = FALSE}
+solution <- tibble(
+  m = 0:4,
+  combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)
+) %>%
+  unnest_longer(combinations) %>%
+  mutate(candle_sum = map_dbl(.x = combinations, .f = sum)) %>%
+  count(candle_sum) %>%
+  summarize(sum(n^2)) %>%
+  pull(1)
+```
+
+The result is `r solution` possible combinations.
+
+
+
+
+
+
