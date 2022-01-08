@@ -9,7 +9,6 @@ tags:
   - r
   - riddler
 subtitle: ''
-excerpt: ''
 draft: no
 series: ~
 layout: single
