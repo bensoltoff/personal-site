@@ -8,7 +8,7 @@ images:
 - img/ben-soltoff.jpg
 show_action_link: true
 show_social_links: true
-subtitle: Husband. Father. Data nerd.
+subtitle: Husband. Father. Human being.
 text_align_left: false
 title: Benjamin Soltoff
 type: home
