@@ -3,7 +3,7 @@
 author: "Benjamin Soltoff"
 role: |
 
-  Assistant Senior Instructional Professor in Computational Social Science
+  Assistant Senior Instructional Professor in Computational Social Science & the College
   
   Associate Director, [Masters in Computational Social Science](https://macss.uchicago.edu)
 avatar_shape: rounded # circle, square, rounded, leave blank to exclude
