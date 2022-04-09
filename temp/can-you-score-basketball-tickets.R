@@ -15,11 +15,20 @@ poss_outcomes <- expand_grid(
   mutate(combos_poss = map(.x = roll_outcomes, .f = combn, m = 2, simplify = FALSE)) %>%
   unnest_longer(col = combos_poss) %>%
   # calculate the sum of all possible two-dice combos
-  mutate(combos_sum = map_dbl(.x = combos_poss, .f = sum)) %>%
-  # count how often each sum can be obtained
-  count(combos_sum)
+  mutate(combos_sum = map_dbl(.x = combos_poss, .f = sum))
 poss_outcomes
 
-# 6, 7, 8, and either 5/9 occur most frequently
-# what percentage of four dice rolls capture these four outcomes?
-sum(poss_outcomes$n[4:7]) / sum(poss_outcomes$n)
+# all possible combinations of 4 number choices
+poss_combos <- combn(2:12, m = 4) %>%
+  array_branch(margin = 2) %>%
+  enframe(name = ".id", value = "roll_choices")
+
+poss_combos %>%
+  # calculate how often each combination of choices wins
+  mutate(num_victory = map_dbl(.x = roll_choices, .f = ~ poss_outcomes %>%
+                                 filter(combos_sum %in% .x) %>%
+                                 ungroup() %>%
+                                 distinct(.id) %>%
+                                 nrow()
+  )) %>%
+  arrange(-num_victory)
