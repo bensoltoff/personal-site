@@ -6,7 +6,7 @@ use_featured: false # if false, use most recent by date
 number_categories: 3 # set to zero to exclude
 show_intro: true
 intro: |
-  I am originally from Northern Virginia. After graduating from [James Madison University](https://www.jmu.edu/), I pursued my PhD in political science from [The Pennsylvania State University](https://www.psu.edu/). I am now a computational social scientist and instructor at the [University of Chicago](https://www.uchicago.edu).
+  I am originally from Northern Virginia. After graduating from [James Madison University](https://www.jmu.edu/), I pursued my PhD in political science from [The Pennsylvania State University](https://www.psu.edu/). I am now an educator and lecturer at [Cornell University](https://infosci.cornell.edu/). Previously I was an Assistant Senior Instructional Professor at the [University of Chicago](https://macss.uchicago.edu/).
 
   My research focused on state judicial politics and utilized machine learning and text analysis to analyze agenda-setting behavior on state courts of last resort, including judicial selection/retention, institutional structure, and case selection under discretionary jurisdiction.
 
