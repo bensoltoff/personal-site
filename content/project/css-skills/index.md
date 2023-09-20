@@ -3,7 +3,7 @@ author: Benjamin Soltoff
 categories:
 - R
 - Courses
-date: "2016-09-01"
+date: "2021-10-01"
 draft: false
 excerpt: The Computational Social Science Technical Skills Workshop (or Computation Skills Workshop for short) trains participants in technical skills and methods which are relevant to computationally-driven research, but are not typically taught in for-credit courses. It provides an explicit introduction to core software environments and interfaces which impose a barrier to access for individuals lacking prior exposure to programming, and facilitates a community of computational researchers across the Division of the Social Sciences.
 layout: single
