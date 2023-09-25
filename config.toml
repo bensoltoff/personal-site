@@ -29,7 +29,7 @@ enableEmoji = true
 
 [params]
   orgName = "Benjamin Soltoff"
-  orgLocal = "Chicago, IL"
+  orgLocal = "Ithaca, NY"
   description = "Personal website for Benjamin Soltoff."
   favicon = "/img/icon-32.png"
   logo = "/img/icon-192.png"
@@ -86,13 +86,13 @@ enableEmoji = true
   # Icon pack "fas" includes solid icons, see: https://fontawesome.com/icons?d=gallery&s=solid&m=free
   # Icon pack "far" includes regular icons, see: https://fontawesome.com/icons?d=gallery&s=regular&m=free
   [[params.social]]
+      icon      = "envelope" # icon name without the 'fa-'
+      icon_pack = "fab"
+      url       = "mailto:ben@bensoltoff.com"
+  [[params.social]]
       icon      = "github" # icon name without the 'fa-'
       icon_pack = "fab"
       url       = "https://github.com/bensoltoff"
-  [[params.social]]
-      icon      = "twitter" # icon name without the 'fa-'
-      icon_pack = "fab"
-      url       = "https://twitter.com/soltoffbc"
   [[params.social]]
       icon      = "rss" # icon name without the 'fa-'
       icon_pack = "fas"
