@@ -2,8 +2,7 @@
 ## Configure sidebar content in narrow column
 author: "Benjamin Soltoff"
 role: |
-
-  Associate Teaching Professor in Information Science
+  Associate Teaching Professor in Information Science <br> <br> Director of the Online Master's Program in AI
 avatar_shape: rounded # circle, square, rounded, leave blank to exclude
 show_social_links: true # specify social accounts in site config
 audio_link_label: "" # leave blank to exclude
