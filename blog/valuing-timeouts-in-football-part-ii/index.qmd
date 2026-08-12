@@ -1,6 +1,6 @@
 ---
 title: "Valuing Timeouts in Football (Part II)"
-description: "What is the (Universal) Value of a Timeout?"
+description: "Last week I examined how one can use logistic regression to estimate the value of a timeout, with minimal success."
 date: "2016-01-18"
 image: featured.png
 categories:

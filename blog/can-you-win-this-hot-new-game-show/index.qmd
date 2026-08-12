@@ -1,6 +1,6 @@
 ---
 title: "Can You Win This Hot New Game Show?"
-description: "Expanding on the Riddler's Problem"
+description: "So the latest Riddler puzzle on FiveThirtyEight goes like this: Two players go on a hot new game show called “Higher Number Wins.” The two go into separate booths, and each presses a button, and a random number between zero and one appears…"
 date: "2016-03-09"
 image: featured.jpg
 categories:
@@ -17,13 +17,13 @@ aliases:
 This post was originally written in 2016 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: `dplyr::tbl_df()`, defunct since dplyr 1.0.0, was replaced with `tibble::as_tibble()`. The analysis and its conclusions are unchanged.
 :::
 
+{{< include ../_setup.qmd >}}
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
 
-```{r n_draw, include = FALSE}
+```{r}
+#| label: n_draw
+#| include: false
+
 # number of rounds to play
 n_draw <- 100000
 ```
@@ -34,35 +34,26 @@ So the latest [Riddler puzzle on FiveThirtyEight](http://fivethirtyeight.com/fea
 
 My initial thought was to try and solve this problem via simulation. The following code will generate `r prettyNum(n_draw, big.mark=",", scientific = FALSE)` rounds of play between two players. For the sake of efficiency, we will draw twice for each player now and consider how the selection of the first or second number influences the outcome of the game.
 
-```{r setup, cache = FALSE, message = FALSE, warning = FALSE}
+```{r}
+#| label: setup
+#| cache: false
+#| message: false
+#| warning: false
+
 library(dplyr)
 library(magrittr)
 library(ggplot2)
 
 set.seed(123)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 16) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(16))
 
 # number of rounds to play
 n_draw <- 100000
 ```
 
-```{r sim_play}
+```{r}
+#| label: sim_play
+
 p1 <- cbind(runif(n_draw), runif(n_draw))
 p2 <- cbind(runif(n_draw), runif(n_draw))
 
@@ -74,19 +65,25 @@ head(p2)
 
 The key thing to realize is that if the players adopt the same strategy, each player will always have a 50% chance of victory. Let's consider a very simple strategy first: no matter what happens, always keep the first number. After all, the number is generated randomly so there is no guarantee that the second number will be larger than the first number. How well does player 1 do if both players employ this strategy?
 
-```{r first_num}
+```{r}
+#| label: first_num
+
 sum(p1[,1] > p2[,1]) / n_draw
 ```
 
 With this strategy, each player has a roughly `r round(sum(p1[,1] > p2[,1]) / n_draw * 100, digits = 0)`% chance of winning the game. We can also see this is the same if each player always takes the second number.
 
-```{r second_num}
+```{r}
+#| label: second_num
+
 sum(p1[,2] > p2[,2]) / n_draw
 ```
 
 Okay, so this strategy is a bit naive. Why not be more sophisticated? Perhaps instead, players will only take the second number if their first number is low. An arbitrary cutpoint might be .5. That is, if either player gets a number less than .5 in the first draw, they will take whatever they get in the second draw. How does this strategy work? Here I write a short function to select the appropriate value from each round based on a specified cutpoint.
 
-```{r cut_5}
+```{r}
+#| label: cut_5
+
 cutoff <- function(draw, cutpoint = .5){
   ifelse(draw[, 1] < cutpoint, draw[, 2], draw[, 1])
 }
@@ -98,7 +95,9 @@ Because each player chose a cutpoint of .5, their probability of winning is stil
 
 This applies to all cutpoints, as long as both players select the same cutpoint.
 
-```{r cut_vary}
+```{r}
+#| label: cut_vary
+
 cutpoints <- seq(0, 1, by = .01)
 results <- lapply(cutpoints,
                   function(cutpoint) sum(cutoff(p1, cutpoint = cutpoint) >
@@ -111,7 +110,9 @@ results_full <- data_frame(cutpoint = cutpoints,
 results_full
 ```
 
-```{r cut_plot}
+```{r}
+#| label: cut_plot
+
 ggplot(results_full, aes(cutpoint, win_prop)) +
   geom_line() +
   scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
@@ -123,7 +124,9 @@ ggplot(results_full, aes(cutpoint, win_prop)) +
 
 Okay, so the issue with this analysis thus far is that this assumes the same strategies by both players. What would happen if two players do not use the same cutpoint? After all, the players cannot communicate with one another so there is no reason to expect that they would choose the same cutpoint. Let's consider what happens if player 1 takes the second number if her first number is less than .5, but player 2 only takes the second number if his first number is less than .9.
 
-```{r vary_cut_function}
+```{r}
+#| label: vary_cut_function
+
 cutoff_2 <- function(p1, p2, cut1 = .5, cut2 = .5){
   sum(cutoff(p1, cutpoint = cut1) > cutoff(p2, cutpoint = cut2))
 }
@@ -153,7 +156,9 @@ Then set each derivative equal to 0, and solve for the appropriate values of *h*
 
 We can also use R to find this solution via [Monte Carlo simulation](https://en.wikipedia.org/wiki/Monte_Carlo_method). This I solved for myself. Essentially we do a [grid search](https://en.wikipedia.org/wiki/Hyperparameter_optimization#Grid_search) over possible combinations of two player cutpoints and find the values which leave each player winning as close to 50% of the rounds as possible.
 
-```{r vary_cut_both}
+```{r}
+#| label: vary_cut_both
+
 cut_lite <- seq(0, 1, by = .025)
 
 cut_combo <- expand.grid(cut_lite, cut_lite) %>%
@@ -164,7 +169,9 @@ cut_combo <- expand.grid(cut_lite, cut_lite) %>%
 cut_combo
 ```
 
-```{r vary_cut_plot}
+```{r}
+#| label: vary_cut_plot
+
 ggplot(cut_combo, aes(cut1, cut2, fill = p1_prop)) +
   geom_raster() +
   # geom_line(data = results_full, aes(cutpoint, cutpoint, fill = NULL)) +

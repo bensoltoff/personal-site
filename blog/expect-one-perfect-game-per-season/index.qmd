@@ -7,12 +7,7 @@ categories:
   - riddler
 ---
 
-
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
-options(digits = 4)
-```
-
+{{< include ../_setup.qmd >}}
 The recent [Riddler Express](https://fivethirtyeight.com/features/can-you-crack-the-case-of-the-crystal-key/) deals with the increasing rate of no-hitters in the MLB:
 
 > As of this week, there have already been six no-hitters this MLB season, well on pace to break the record for no-hitters for a season in the modern era, which stands at nine in 1990.
@@ -27,28 +22,18 @@ To answer the question, we first need to know for a given on-base percentage wha
 
 We can model this probability using the [Geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution) which is the probability distribution of the number of $Y = X - 1$ failures before the first success. In this case, success is defined as a batter reaching base. So we need to know the probability of achieving 27 failures in a row. We can use `pgeom()` to calculate this probability given a specific on-base percentage. Here I iterate through all possible on-base percentages to the third decimal place.
 
-```{r packages, cache = FALSE}
+```{r}
+#| label: packages
+#| cache: false
+
 library(tidyverse)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 18) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(18))
 ```
 
-```{r perfect-games, warning = FALSE}
+```{r}
+#| label: perfect-games
+#| warning: false
+
 perfect_games <- tibble(
   # range of possible on base percentages
   obp = seq(from = 0, to = 1, by = 0.001),
@@ -79,7 +64,11 @@ We know $p$ - but what is $n$? That is the total number of games in an MLB seaso
 
 $$\frac{162 \times 30}{2} = `r 162 * 30 / 2`$$
 
-```{r perfect-games-season, dependson = "perfect-games", warning = FALSE}
+```{r}
+#| label: perfect-games-season
+#| dependson: perfect-games
+#| warning: false
+
 n_games <- 162 * 30 / 2
 
 perfect_games_season <- perfect_games %>%
@@ -98,7 +87,11 @@ ggplot(data = perfect_games_season, mapping = aes(x = obp, y = prob_at_least_one
 
 Again, when on-base percentage is astronomically low we would expect a large number of perfect games.
 
-```{r perfect-games-zoom, dependson = "perfect-games-season", warning = FALSE}
+```{r}
+#| label: perfect-games-zoom
+#| dependson: perfect-games-season
+#| warning: false
+
 obp_1 <- filter(perfect_games_season, prob_at_least_one >= 1) %>%
   pull(obp) %>%
   max()

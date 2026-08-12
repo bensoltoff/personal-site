@@ -9,12 +9,7 @@ aliases:
   - /post/how-good-are-you-at-guess-who/
 ---
 
-
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
-
+{{< include ../_setup.qmd >}}
 The most recent [Riddler Express](https://fivethirtyeight.com/features/how-good-are-you-at-guess-who/) gave me an opportunity to refresh some base R notation, as well as combine it with a technique I learned while reading Hadley Wickham's [Advanced R](https://adv-r.hadley.nz/). The challenge is:
 
 > A local cafe has board games on a shelf, designed to keep kids (and some adults) entertained while they wait on their food. One of the games is a tic-tac-toe board, which comes with nine pieces that you and your opponent can place: five Xs and four Os.
@@ -35,29 +30,18 @@ $$\frac{9!}{(9-9)!} = \frac{9!}{0!}$$
 
 where by definition $0! = 1$. So we have `r prettyNum(factorial(9), big.mark = ",")` possible outcomes. We can generate all those possible outcomes using `gtools::permutations()`. In order to use this function, each value in the vector to permute must be unique. So I represent each value uniquely, then after I generate all possible permutations represent the Xs as $+1$ and the Os as $-1$.
 
-```{r setup, cache = FALSE}
+```{r}
+#| label: setup
+#| cache: false
+
 library(tidyverse)
 set.seed(123)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 18) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(18))
 ```
 
-```{r pieces}
+```{r}
+#| label: pieces
+
 pieces <- c(rep(1, times = 5), rep(-1, times = 4))
 all_outcomes <- gtools::permutations(n = length(pieces), r = length(pieces), v = seq_along(pieces))
 head(all_outcomes)
@@ -70,7 +54,9 @@ head(all_outcomes)
 
 Next I wrote a function that takes a single permutation as its input, turns it into a matrix, and checks to see if there are three Xs in any row, column, or diagonal. Since `diag()` only returns the diagonal of a matrix and I also need to evaluate the diagonal running from bottom to top, I use the `rotate()` function[^SO] to turn the game board 90 degrees - this allows me to use the `diag()` function to obtain the same results.
 
-```{r func}
+```{r}
+#| label: func
+
 # function to rotate a matrix 90 degrees to check the other diagonal
 rotate <- function(x) t(apply(x, 2, rev))
 
@@ -109,7 +95,10 @@ tic_tac_toe(all_outcomes[1, ], print_board = TRUE) # test the function
 
 Now that I know the function works, I need to apply it to all possible outcomes. Since `all_outcomes` is structured as a matrix, an `apply()` function would be appropriate here. The problem is I have not used `apply()` in years, and I am biased towards `purrr::map()` functions. Typically `map()` cannot be used on a matrix input. However, [`purrr` includes a handy function called `array_branch()`](https://github.com/tidyverse/purrr/issues/341#issuecomment-353959893) which converts a matrix to a list object that can then be mapped over.
 
-```{r outcomes, dependson = c("pieces", "func")}
+```{r}
+#| label: outcomes
+#| dependson: ["pieces", "func"]
+
 all_outcomes <- tibble(
   outcome = array_branch(all_outcomes, 1),
   result = map_chr(outcome, tic_tac_toe)
@@ -119,7 +108,10 @@ all_outcomes
 
 So what are the results? What is the probability X wins?
 
-```{r results, dependson = "outcomes"}
+```{r}
+#| label: results
+#| dependson: outcomes
+
 all_outcomes_sum <- all_outcomes %>%
   count(result) %>%
   mutate(prop = n / sum(n))

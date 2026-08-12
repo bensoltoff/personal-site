@@ -1,6 +1,6 @@
 ---
 title: "Can You Best The Mysterious Man In The Trench Coat?"
-description: "Expanding on the Riddler's Problem"
+description: "The latest Riddler puzzle on FiveThirtyEight: A man in a trench coat approaches you and pulls an envelope from his pocket. He tells you that it contains a sum of money in bills, anywhere from $1 up to $1,000."
 date: "2016-03-20"
 image: featured.jpg
 categories:
@@ -17,9 +17,13 @@ aliases:
 This post was originally written in 2016 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: `dplyr::tbl_df()`, defunct since dplyr 1.0.0, was replaced with `tibble::as_tibble()`. The analysis and its conclusions are unchanged.
 :::
 
+{{< include ../_setup.qmd >}}
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
+
+```{r}
+#| label: post-settings
+#| include: false
+
 options(digits = 2)
 ```
 
@@ -35,27 +39,16 @@ I can iterate through this process with up to 9 guesses. At that point, if I sti
 
 To simulate this process in `R`, I wrote the following function
 
-```{r setup, cache = FALSE, message = FALSE, warning = FALSE}
+```{r}
+#| label: setup
+#| cache: false
+#| message: false
+#| warning: false
+
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 16) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(16))
 set.seed(123)
 
 # function to guess money amount using strategy
@@ -102,7 +95,9 @@ guess_money <- function(actual, initial, n_tries = 9,
 
 As an example, let's say the actual amount of money is \$736 and my first guess is \$500. Here's how that would play out:
 
-```{r example736}
+```{r}
+#| label: example736
+
 guess_money(actual = 736, initial = 500, print_guess = TRUE)
 ```
 
@@ -110,7 +105,9 @@ This tells me the different guesses, as well as the fact that I eventually won (
 
 Of course, there is no reason why I have to choose \$500 for my initial guess. What if I instead started at \$1?
 
-```{r example274}
+```{r}
+#| label: example274
+
 guess_money(actual = 736, initial = 1, print_guess = TRUE)
 ```
 
@@ -120,7 +117,9 @@ To answer that question, I calculate the results for every potential initial gue
 
 In order to do this in `R`, I use the `Vectorize` function to expand my original function to work with multiple game states.
 
-```{r all_vals}
+```{r}
+#| label: all_vals
+
 min_val <- 1
 max_val <- 1000
 actual_vals <- min_val:max_val
@@ -142,7 +141,9 @@ both
 
 Now that we have all the potential outcomes of the game, I can calculate the expected winnings for each initial guess and find the best starting point.
 
-```{r exp_val}
+```{r}
+#| label: exp_val
+
 exp_val <- both %>%
   group_by(guess) %>%
   summarize(
@@ -174,7 +175,9 @@ So if you get up to nine guesses, your first guess should be `r paste0("\\$", ex
 
 There are a range of initial guesses that provide you the same overall win rate.
 
-```{r win_rate}
+```{r}
+#| label: win_rate
+
 both %>%
   group_by(guess) %>%
   summarize(win_rate = mean(win)) %>%
@@ -190,7 +193,9 @@ both %>%
 
 The win rate for initially guessing \$300 is the same as for initially guessing \$600 - `r with(exp_val, win_rate[guess == 300]) * 100`%. However the expected value for initially guessing \$300 is just \$`r round(with(exp_val, exp_val[guess == 300]))`, compared to initially guessing \$600 ($`r round(with(exp_val, exp_val[guess == 600]))`). Which actual values can you win before you run out of attempts?
 
-```{r compare_300_600}
+```{r}
+#| label: compare_300_600
+
 both %>%
   filter(guess == 300 | guess == 600) %>%
   mutate(
@@ -221,7 +226,9 @@ But what if we modify the game rules so that you get fewer guesses? Or more gues
 
 Here I do the same thing as before, but I vary the number of tries the player gets for each set of simulations.
 
-```{r exp_val_all}
+```{r}
+#| label: exp_val_all
+
 guess_money_mult <- function(n_tries = 1, min_val = 1, max_val = 1000) {
   actual_vals <- min_val:max_val
   guess_vals <- min_val:max_val
@@ -246,7 +253,9 @@ tries_all <- lapply(1:11, function(x) guess_money_mult(n_tries = x)) %>%
   bind_rows()
 ```
 
-```{r exp_val_all_plot}
+```{r}
+#| label: exp_val_all_plot
+
 tries_all_exp <- tries_all %>%
   mutate(n_tries = factor(n_tries)) %>%
   group_by(guess, n_tries) %>%
@@ -286,7 +295,9 @@ The fewer guesses you receive, the higher your initial guess must be to maximize
 
 ## Update: Only Need 11 Guesses
 
-```{r exp_val_all_win}
+```{r}
+#| label: exp_val_all_win
+
 ggplot(tries_all_exp, aes(guess, win_rate,
   group = n_tries, color = n_tries
 )) +
@@ -310,7 +321,9 @@ ggplot(tries_all_exp, aes(guess, win_rate,
 
 ### Original rounding method
 
-```{r rounding}
+```{r}
+#| label: rounding
+
 min_val <- 1
 max_val <- 1000
 actual_vals <- min_val:max_val
@@ -337,7 +350,9 @@ bind_cols(data, t(result) %>%
 
 ### Always round down
 
-```{r floor}
+```{r}
+#| label: floor
+
 guess_money_floor <- function(actual, initial, n_tries = 9,
                               min_val = 1, max_val = 1000,
                               print_guess = FALSE) {
@@ -396,7 +411,9 @@ bind_cols(data, t(result) %>%
 
 ### Always round up
 
-```{r ceiling}
+```{r}
+#| label: ceiling
+
 guess_money_ceiling <- function(actual, initial, n_tries = 9,
                                 min_val = 1, max_val = 1000,
                                 print_guess = FALSE) {

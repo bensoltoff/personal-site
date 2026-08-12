@@ -7,12 +7,7 @@ categories:
   - riddler
 ---
 
-
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
-options(digits = 4)
-```
-
+{{< include ../_setup.qmd >}}
 Today's [Riddler Express](https://fivethirtyeight.com/features/can-you-bake-the-radish-pie/) was an interesting application of sequences and convergence:[^math-camp]
 
 > I recently came across a rather peculiar recipe for something called Babylonian radish pie. Intrigued, I began to follow the directions, which said I could start with any number of cups of flour.
@@ -44,31 +39,21 @@ $$
 
 Full disclosure: I knew it was a sequence, but didn't bother thinking of it mathematically until after I solved it computationally. So I might as well showcase that work here, as it also forced me to remember how to use `while()` loops in functions.
 
-```{r packages, cache = FALSE, message = FALSE}
+```{r}
+#| label: packages
+#| cache: false
+#| message: false
+
 library(tidyverse)
 library(gganimate)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 18) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(18))
 ```
 
 First I need a function to apply the algorithm for any given initial guess.
 
-```{r flour-start}
+```{r}
+#| label: flour-start
+
 flour_start <- function(step_1) {
   # divide 3 by starting amount
   step_2 <- 3 / step_1
@@ -82,7 +67,9 @@ flour_start <- function(step_1) {
 
 Next I want to apply this function for any initial estimate, applying it to each successive estimate until I converge to a stable estimate (as defined by the `tolerance` threshold):
 
-```{r flour-needed}
+```{r}
+#| label: flour-needed
+
 # generate sequence of measurements
 flour_needed <- function(initial_guess, tolerance = 0.001){
   # placeholder for measurements
@@ -113,7 +100,10 @@ flour_needed <- function(initial_guess, tolerance = 0.001){
 
 At this point, I can apply it to a bunch of random starting guesses. They just need to be positive values, so I generated them from a uniform distribution between 0 and 100.
 
-```{r trials, dependson = c("flour-start", "flour-needed")}
+```{r}
+#| label: trials
+#| dependson: ["flour-start", "flour-needed"]
+
 # test the function with random positive values
 set.seed(123)
 flour_trials <- tibble(
@@ -130,7 +120,10 @@ flour_trials <- tibble(
 
 How does it perform?
 
-```{r trials-viz, dependson = "trials"}
+```{r}
+#| label: trials-viz
+#| dependson: trials
+
 # animate the measurements
 ggplot(data = flour_trials, mapping = aes(x = n_id, y = flour_seq, group = .id)) +
   geom_line(alpha = .02) +

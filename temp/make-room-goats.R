@@ -12,7 +12,7 @@ prod_two <- expand_grid(n1 = prices, n2 = prices) %>%
 # first three combos
 prod_three <- expand_grid(prod_two, n3 = prices) %>%
   # check sum is less than 7.11
-  filter(n1 + n2  + n3 < 7.11) %>%
+  filter(n1 + n2 + n3 < 7.11) %>%
   filter(n1 <= n2, n2 <= n3)
 
 # figure out what value needs to be for fourth price to sum

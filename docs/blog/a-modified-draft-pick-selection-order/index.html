@@ -267,7 +267,7 @@ window.Quarto = {
 </blockquote>
 <p>One could go the analytical route to solve this, but I wanted to take a computational, brute-force approach. This type of problem is ripe for Markov chain Monte Carlo (MCMC) methods, which I’ve use before in <a href="http://www.bensoltoff.com/r/can-you-win-this-hot-new-game-show/">Riddler solutions</a>.</p>
 <p>The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of <span class="math inline">\(K\)</span> groups. The function I wrote is:</p>
-<div class="cell" data-messages="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>draft_pick_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n_teams =</span> <span class="dv">30</span>, <span class="at">n_groups =</span> <span class="dv">2</span>, <span class="at">n_sims =</span> <span class="dv">100</span>){</span>
@@ -305,79 +305,79 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">8.33</td>
+<td style="text-align: right;">8.30</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">2</td>
-<td style="text-align: right;">8.82</td>
+<td style="text-align: right;">8.86</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">3</td>
-<td style="text-align: right;">9.21</td>
+<td style="text-align: right;">9.22</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">4</td>
-<td style="text-align: right;">9.74</td>
+<td style="text-align: right;">9.73</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">10.21</td>
+<td style="text-align: right;">10.11</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">6</td>
-<td style="text-align: right;">10.74</td>
+<td style="text-align: right;">10.77</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">7</td>
-<td style="text-align: right;">11.23</td>
+<td style="text-align: right;">11.26</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">8</td>
-<td style="text-align: right;">11.75</td>
+<td style="text-align: right;">11.73</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">12.18</td>
+<td style="text-align: right;">12.25</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">10</td>
-<td style="text-align: right;">12.82</td>
+<td style="text-align: right;">12.88</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">11</td>
-<td style="text-align: right;">13.15</td>
+<td style="text-align: right;">13.33</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">12</td>
-<td style="text-align: right;">13.87</td>
+<td style="text-align: right;">13.74</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">13</td>
-<td style="text-align: right;">14.19</td>
+<td style="text-align: right;">14.29</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">14</td>
-<td style="text-align: right;">14.80</td>
+<td style="text-align: right;">14.73</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">15</td>
-<td style="text-align: right;">15.34</td>
+<td style="text-align: right;">15.27</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">16</td>
-<td style="text-align: right;">15.65</td>
+<td style="text-align: right;">15.69</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">17</td>
-<td style="text-align: right;">16.34</td>
+<td style="text-align: right;">16.26</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">18</td>
-<td style="text-align: right;">16.66</td>
+<td style="text-align: right;">16.76</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">19</td>
-<td style="text-align: right;">17.39</td>
+<td style="text-align: right;">17.18</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">20</td>
@@ -385,27 +385,27 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td style="text-align: right;">21</td>
-<td style="text-align: right;">18.37</td>
+<td style="text-align: right;">18.16</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">22</td>
-<td style="text-align: right;">18.74</td>
+<td style="text-align: right;">18.80</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">23</td>
-<td style="text-align: right;">19.15</td>
+<td style="text-align: right;">19.26</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">24</td>
-<td style="text-align: right;">19.79</td>
+<td style="text-align: right;">19.68</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">25</td>
-<td style="text-align: right;">20.26</td>
+<td style="text-align: right;">20.40</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">26</td>
-<td style="text-align: right;">20.54</td>
+<td style="text-align: right;">20.80</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">27</td>
@@ -413,15 +413,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td style="text-align: right;">28</td>
-<td style="text-align: right;">21.70</td>
+<td style="text-align: right;">21.63</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">29</td>
-<td style="text-align: right;">22.31</td>
+<td style="text-align: right;">22.21</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">30</td>
-<td style="text-align: right;">22.70</td>
+<td style="text-align: right;">22.68</td>
 </tr>
 </tbody>
 </table>

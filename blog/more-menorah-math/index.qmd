@@ -7,12 +7,7 @@ categories:
   - riddler
 ---
 
-
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
-
+{{< include ../_setup.qmd >}}
 This week's [Riddler Express](https://fivethirtyeight.com/features/can-you-slice-the-ice/) deals with some menorah math that provides a good application for combinatorics:
 
 > Tonight marks the sixth night of Hanukkah, which means it's time for some more Menorah Math!
@@ -25,7 +20,10 @@ In this problem, we need to identify all the possible combinations of lighting e
 
 We could do this by hand, but R has the handy `combn()` function for generating all combinations of a set of elements. For example, if we wanted all combinations of choosing three candles we could write:
 
-```{r pkg, cache = FALSE}
+```{r}
+#| label: pkg
+#| cache: false
+
 library(tidyverse)
 ```
 
@@ -88,7 +86,9 @@ tibble(
   summarize(sum(n^2))
 ```
 
-```{r include = FALSE}
+```{r}
+#| include: false
+
 solution <- tibble(
   m = 0:4,
   combinations = map(.x = m, .f = combn, x = 4, simplify = FALSE)

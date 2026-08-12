@@ -26,5 +26,3 @@ games_match_bat_avg <- bat_avg_possible %>%
 games_match_bat_avg_not <- distinct(.data = bat_avg_possible, games_played) %>%
   anti_join(games_match_bat_avg)
 arrange(.data = games_match_bat_avg_not, -games_played)
-
-

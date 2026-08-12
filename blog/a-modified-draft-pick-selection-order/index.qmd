@@ -10,9 +10,12 @@ aliases:
   - /post/a-modified-draft-pick-selection-order/
 ---
 
+{{< include ../_setup.qmd >}}
+```{r}
+#| label: post-settings
+#| include: false
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 options(digits = 3)
 ```
 
@@ -26,7 +29,9 @@ One could go the analytical route to solve this, but I wanted to take a computat
 
 The main task is to write a function that calculates the new draft position for a team given their current draft pick and potential assignment into one of $K$ groups. The function I wrote is:
 
-```{r, messages = FALSE}
+```{r}
+#| message: false
+
 library(tidyverse)
 
 draft_pick_sim <- function(n_teams = 30, n_groups = 2, n_sims = 100){

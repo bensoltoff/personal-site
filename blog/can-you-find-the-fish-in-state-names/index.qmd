@@ -16,11 +16,8 @@ aliases:
 This post was originally written in 2020 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: the `keep` argument of `dplyr::group_split()`, defunct since dplyr 1.0.0, was renamed to `.keep`. The analysis and its conclusions are unchanged.
 :::
 
+{{< include ../_setup.qmd >}}
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE, cache.lazy = FALSE)
-options(digits = 4)
-```
 
 The recent [Riddler classic](https://fivethirtyeight.com/features/somethings-fishy-in-the-state-of-the-riddler/) offered this intriguing challenge:
 
@@ -36,31 +33,20 @@ Given the [provided dictionary](https://norvig.com/ngrams/word.list), we need to
 
 In order to do that, I tokenized each word at the character-level, then compared the list of dictionary words to all the state names to find all non-overlapping pairs of words.
 
-```{r packages, cache = FALSE}
+```{r}
+#| label: packages
+#| cache: false
+
 library(tidyverse)
 library(tidytext)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 18) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(18))
 ```
 
 First we retrieve the dictionary of words. R already includes state names as the `state.name` constant.
 
-```{r get-words}
+```{r}
+#| label: get-words
+
 # get list of words
 all_words <- tibble(word = readLines("https://norvig.com/ngrams/word.list"))
 states <- tibble(word = state.name)
@@ -68,7 +54,10 @@ states <- tibble(word = state.name)
 
 Next I use `tidytext::unnest_tokens()` to tokenize at the character level. Since it doesn't matter how many times the word uses a specific character, I just need each distinct appearance.[^lowercase] From here I `nest()` the data frame so each word is a row and all their unique characters are in separate characte vectors.
 
-```{r tokenize, dependson = "get-words"}
+```{r}
+#| label: tokenize
+#| dependson: get-words
+
 # combine together
 tokens <- bind_rows(
   all_words = all_words,
@@ -95,7 +84,10 @@ tokens
 
 From here, I need to form all possible combinations between each dictionary word and state name. `expand.grid()` lets me form all possible combinations, while a couple of `left_join()` operations bring together all the character tokens.
 
-```{r combo, dependson = "tokenize"}
+```{r}
+#| label: combo
+#| dependson: tokenize
+
 # form all possible cominations of the dictionary and state names
 tokens_combo <- expand.grid(
   word_all = tokens[[1]]$word,
@@ -111,7 +103,10 @@ tokens_combo
 
 The tricky part was finding the correct syntax to check all the characters in the dictionary word individually -- if any of the letters could be found in the state name, we did not have a valid match. Combining `%in%` with the `any()` function allows us to do just that.
 
-```{r not-in-common, dependson = "combo"}
+```{r}
+#| label: not-in-common
+#| dependson: combo
+
 # only keep rows where the dictionary word does not have any letters in common
 # with the state name
 words_not_in_common <- tokens_combo %>%
@@ -125,7 +120,10 @@ Turns out that even with millions of pairs to iterate through, it only took abou
 
 From here, we just need to find all the mackerels and check their word length.
 
-```{r unique-mackerel, dependson = "not-in-common"}
+```{r}
+#| label: unique-mackerel
+#| dependson: not-in-common
+
 # check to see if a word has multiple mackerels
 mackerels <- words_not_in_common %>%
   count(word_all) %>%
@@ -150,7 +148,11 @@ mackerels %>%
 
 As for the extra credit, which states have the most mackerels? Given what we already calculated, let's instead aggregate total number of mackerels for each state.
 
-```{r extra-credit, dependson = "unique-mackerel", fig.height = 10}
+```{r}
+#| label: extra-credit
+#| dependson: unique-mackerel
+#| fig-height: 10
+
 # join with states info
 state_mackerels <- mackerels %>%
   count(word_state) %>%
@@ -177,7 +179,10 @@ ggplot(
 
 Ohio is the clear winner; rounding out the top four are Alabama, Utah, and Mississippi.
 
-```{r, eval = FALSE, include = FALSE}
+```{r}
+#| eval: false
+#| include: false
+
 letter_dist <- tokens[[1]] %>%
   unnest(letters) %>%
   count(letters) %>%

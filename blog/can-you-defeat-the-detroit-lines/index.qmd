@@ -7,12 +7,7 @@ categories:
   - riddler
 ---
 
-
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
-
+{{< include ../_setup.qmd >}}
 This week's [Riddler Express](https://fivethirtyeight.com/features/can-you-trek-the-triangle/) features a challenge drawn from the world of football analytics:
 
 > In the Riddler Football League, you are coaching the Arizona Ordinals against your opponent, the Detroit Lines, and your team is down by 14 points. You can assume that you have exactly two remaining possessions (i.e., opportunities to score), and that Detroit will score no more points.
@@ -64,24 +59,13 @@ p_win_out <- p_win(p)
 p[[which.min(abs(p_win_out - .5))]]
 ```
 
-```{r message = FALSE, echo = FALSE, fig.cap = "Probability of victory based on different two-point conversion success rates"}
-library(tidyverse)
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
+```{r}
+#| message: false
+#| echo: false
+#| fig-cap: Probability of victory based on different two-point conversion success rates
 
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 16) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+library(tidyverse)
+theme_set(brand_theme(16))
 
 # graph the prob
 tibble(

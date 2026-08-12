@@ -10,12 +10,7 @@ aliases:
   - /post/winning-the-world-chess-championship/
 ---
 
-
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
-
+{{< include ../_setup.qmd >}}
 [This week's Riddler Express from FiveThirtyEight](https://fivethirtyeight.com/features/the-riddler-just-had-to-go-and-reinvent-beer-pong/):
 
 > The World Chess Championship is underway. It is a 12-game match between the world’s top two grandmasters. Many chess fans feel that 12 games is far too short for a biennial world championship match, allowing too much variance.
@@ -26,29 +21,17 @@ I'm currently teaching a [math/stats course](https://css18.github.io/) and we've
 
 Based on the example [here](https://rpubs.com/JanpuHou/296336), I wrote a generalizable function to estimate the probability of win, lose, and draw for all possible outcomes for any number of $n$ matches and probabilities $p$, and applied it to matches with length between 1 and 300 using the probabilities identified in the problem.
 
-```{r setup}
+```{r}
+#| label: setup
+
 library(tidyverse)
 library(magrittr)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 18) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(18))
 ```
 
-```{r chess-func}
+```{r}
+#| label: chess-func
+
 chess_outcomes <- function(n_matches, prob){
   # define all possibilities
   X <- expand.grid(n = 0:n_matches,
@@ -74,7 +57,9 @@ chess_outcomes <- function(n_matches, prob){
 }
 ```
 
-```{r vary-matches}
+```{r}
+#| label: vary-matches
+
 # iterate over a varying number of matches
 varying_matches <- tibble(n_matches = 1:300) %>%
   mutate(outcomes = map(n_matches, chess_outcomes, prob = c(0.2, 0.15, 0.65)),
@@ -83,7 +68,9 @@ varying_matches <- tibble(n_matches = 1:300) %>%
          prob_loss = map2_dbl(outcomes, n_matches, ~ mean(.x$points < (.y / 2))))
 ```
 
-```{r plot-results}
+```{r}
+#| label: plot-results
+
 ggplot(varying_matches, aes(n_matches, prob_win)) +
   geom_line() +
   scale_y_continuous(labels = scales::percent) +

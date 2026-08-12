@@ -16,11 +16,8 @@ aliases:
 This post was originally written in 2020 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: `purrr::rerun()` and `purrr::as_vector()`, both deprecated in purrr 1.0, were replaced with base equivalents. This was also a performance fix — the deprecation machinery made the 200,000 simulation calls take roughly 11 minutes; the replacement produces identical results in about a second. The analysis and its conclusions are unchanged.
 :::
 
+{{< include ../_setup.qmd >}}
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
 
 I enjoyed the recent [Riddler challenger](https://fivethirtyeight.com/features/can-you-find-the-best-dungeons-dragons-strategy/) from May 15th:
 
@@ -32,30 +29,19 @@ I enjoyed the recent [Riddler challenger](https://fivethirtyeight.com/features/c
 
 To simulate this, I need to write a few functions to sample from a random number generator simulating the die rolls. I'm sure I could have written these more efficiently, but I can take advantage of `purrr::map()` and basic iterative operations to repeatedly simulate this process.
 
-```{r setup, cache = FALSE}
+```{r}
+#| label: setup
+#| cache: false
+
 library(tidyverse)
 library(glue)
 set.seed(123)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 18) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(18))
 ```
 
-```{r functions}
+```{r}
+#| label: functions
+
 # constants
 n_sides <- 20
 n_sim <- 1e05
@@ -105,7 +91,10 @@ single_roll <- function(n_sizes = 20) {
 
 From here, it's simply a matter of testing each strategy lots of times and averaging over the resulting outcomes.
 
-```{r sim-rolls, dependson = "functions"}
+```{r}
+#| label: sim-rolls
+#| dependson: functions
+
 # simulate a bunch of rolls
 rolls <- tibble(
   .id = 1:n_sim
@@ -117,7 +106,10 @@ rolls <- tibble(
   pivot_longer(cols = -.id, names_to = "type_roll", values_to = "outcome")
 ```
 
-```{r exp-val, dependson = "sim-rolls"}
+```{r}
+#| label: exp-val
+#| dependson: sim-rolls
+
 # expected value of each method
 rolls %>%
   group_by(type_roll) %>%
@@ -139,7 +131,10 @@ It turns out the optimal strategy is disadvantage of advantage!
 
 As for the extra credit challenge, rather than averaging over all the outcomes I need to check for each possible value for $N$ whether the roll would have been successful or not.
 
-```{r n-or-better, dependson = c("functions", "sim-rolls")}
+```{r}
+#| label: n-or-better
+#| dependson: ["functions", "sim-rolls"]
+
 # which is optimal method for needing to roll N or better
 n_better <- function(req_out = 10, rolls_df) {
   rolls_df %>%
@@ -155,7 +150,10 @@ rolls_by_n <- tibble(
   summarize(success = mean(success))
 ```
 
-```{r n-or-better-plot, dependson = "n-or-better"}
+```{r}
+#| label: n-or-better-plot
+#| dependson: n-or-better
+
 ggplot(
   data = rolls_by_n,
   mapping = aes(x = n, y = success, color = type_roll)

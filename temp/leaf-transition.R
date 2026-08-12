@@ -3,7 +3,7 @@ library(tidyverse)
 set.seed(123)
 
 # function to simulate finding start and end of leaf transition
-leaf_transition <- function(){
+leaf_transition <- function() {
   # find start time of transition
   trans_start <- runif(n = 1, min = 0, max = 1)
 
@@ -21,7 +21,12 @@ leaf_sims <- rerun(.n = n_sims, leaf_transition()) %>%
 
 # intervals to check at
 check_intervals <- seq(from = 0, to = 1, by = 0.001)
-map2(.x = leaf_sims[, 1], .y = leaf_sims[, 2], .f = between, x = check_intervals) %>%
+map2(
+  .x = leaf_sims[, 1],
+  .y = leaf_sims[, 2],
+  .f = between,
+  x = check_intervals
+) %>%
   unlist() %>%
   matrix(nrow = length(check_intervals), byrow = TRUE) %>%
   rowSums() %>%

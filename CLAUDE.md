@@ -14,7 +14,16 @@ find instructions referring to `hugo`, `blogdown`, `config.toml`, or `content/`,
 quarto preview          # local server with live reload
 quarto render           # full build into docs/
 quarto render blog/<slug>/index.qmd   # single post
+air format .            # format R source -- run before every commit
 ```
+
+Formatting is split across two mechanisms:
+
+- **`air format .`** (CLI) handles `.R` files — here that is `temp/*.R`. It correctly skips the
+  renv-generated `renv/activate.R`. Run it before every commit.
+- **`.qmd` code cells** are formatted on save in VS Code, via `.vscode/settings.json`: the Quarto
+  extension formats `[quarto]` files and `Posit.air-vscode` formats `[r]`. The air *CLI* does not
+  reformat R cells inside `.qmd`, so editing a post outside VS Code means formatting it by hand.
 
 R dependencies are managed with **renv**. `.Rprofile` activates it automatically, so a plain `quarto
 render` uses the project library. After adding a package: `renv::snapshot()`. The lockfile uses snapshot

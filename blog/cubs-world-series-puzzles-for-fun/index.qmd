@@ -1,6 +1,6 @@
 ---
 title: "Cubs World Series Puzzles (For Fun)"
-description: "Expanding on the Riddler's Problem"
+description: "This week's Riddler Express from FiveThirtyEight: The best team in baseball this year, the Chicago Cubs, have clinched their playoff spot and will play their first playoff game a week from today."
 date: "2016-10-06"
 image: featured.jpg
 categories:
@@ -17,13 +17,13 @@ aliases:
 This post was originally written in 2016 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: `purrr::rerun()`, deprecated in purrr 1.0, was replaced with `map()` over a sequence. The analysis and its conclusions are unchanged.
 :::
 
+{{< include ../_setup.qmd >}}
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE)
-options(digits = 4)
-```
 
-```{r n_draw, include = FALSE}
+```{r}
+#| label: n_draw
+#| include: false
+
 # number of rounds to play
 n_draw <- 100000
 ```

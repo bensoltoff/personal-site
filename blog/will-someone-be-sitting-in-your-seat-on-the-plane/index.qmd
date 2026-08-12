@@ -1,6 +1,6 @@
 ---
 title: "Will Someone Be Sitting In Your Seat On The Plane?"
-description: "Expanding on the Riddler's Problem"
+description: "This week's Riddler puzzle on FiveThirtyEight features the following questions: There’s an airplane with 100 seats, and there are 100 ticketed passengers each with an assigned seat. They line up to board in some random order."
 date: "2016-02-21"
 image: featured.jpg
 categories:
@@ -17,35 +17,29 @@ aliases:
 This post was originally written in 2016 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: `dplyr::tbl_df()`, defunct since dplyr 1.0.0, was replaced with `tibble::as_tibble()`. The analysis and its conclusions are unchanged.
 :::
 
+{{< include ../_setup.qmd >}}
 
-```{r settings, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(cache = TRUE, message = FALSE, warning = FALSE, echo = FALSE)
+
+```{r}
+#| label: post-settings
+#| include: false
+
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE)
 options(digits = 2)
 ```
 
-```{r packages, cache = FALSE}
+```{r}
+#| label: packages
+#| cache: false
+
 library(tidyverse)
-
-# Use the same families and weights as the site. These resolve to static
-# TTFs; the variable-font builds ignore the weight axis under ragg.
-systemfonts::require_font("Commissioner", verbose = FALSE)
-systemfonts::register_variant("Commissioner Light",
-                              family = "Commissioner", weight = "light")
-systemfonts::register_variant("Fraunces Soft Light",
-                              family = "Fraunces 72pt Soft", weight = "light")
-
-theme_set(
-  brand.yml::theme_brand_ggplot2(base_size = 16) +
-    theme(
-      text = element_text(family = "Commissioner Light"),
-      plot.title = element_text(family = "Fraunces Soft Light"),
-      plot.subtitle = element_text(family = "Fraunces Soft Light")
-    )
-)
+theme_set(brand_theme(16))
 set.seed(123)
 ```
 
-```{r sim-seats-func}
+```{r}
+#| label: sim-seats-func
+
 simulate_seats <- function(seats = 100, planes = 100000) {
   m <- matrix(seq_len(seats), nrow = seats, ncol = planes)
   
@@ -73,14 +67,20 @@ Coincidentally, I had seen "the lost boarding pass" problem described and solved
 
 An [Airbus A380](https://en.wikipedia.org/wiki/Airbus_A380) has a maximum passenger capacity of 538 seats, which I rounded up to 600 for my maximum plane size. As seen below, it doesn't matter the size of the plane - the probability of the last passenger sitting in his assigned seat is always 1/2.
 
-```{r sims, dependson = "sim-seats-func"}
+```{r}
+#| label: sims
+#| dependson: sim-seats-func
+
 # sim for flights of between 10 and 600 seats
 seats <- 3:600
 sims <- lapply(seats, function(x) simulate_seats(seats = x, planes = 1000))
 probs <- lapply(seats, function(x) mean(sims[[x - 2]][x, ] == x))
 ```
 
-```{r plot1, dependson = "sims"}
+```{r}
+#| label: plot1
+#| dependson: sims
+
 tibble(seats = seats,
        prob = unlist(probs)) %>%
   ggplot(aes(seats, prob)) +
@@ -93,7 +93,10 @@ tibble(seats = seats,
 
 In fact, as long as you are not one of the last passengers to board the airplane, you have an extremely high probability of sitting in your correct seat.
 
-```{r correct_by_seat, dependson = "sims"}
+```{r}
+#| label: correct_by_seat
+#| dependson: sims
+
 correct_by_seats <- lapply(sims, function(sim) rowMeans(sim == seq_len(nrow(sim))))
 
 n.obs <- sapply(correct_by_seats, length)
@@ -110,7 +113,10 @@ correct_by_seats <- sapply(correct_by_seats, "[", i = seq.max) %>%
   mutate(seats = parse_number(seats) + 2)
 ```
 
-```{r plot2, dependson = "correct_by_seat"}
+```{r}
+#| label: plot2
+#| dependson: correct_by_seat
+
 ggplot(correct_by_seats, aes(passenger, prob, group = seats)) +
   geom_line(alpha = .2) +
   labs(x = "Passenger Boarding Order",
@@ -119,7 +125,10 @@ ggplot(correct_by_seats, aes(passenger, prob, group = seats)) +
 
 We can in fact be a bit more precise. As long as you are not one of the last 10 passengers to board the plane, regardless of the size of the plane, you have a greater than 90% chance of sitting in your correct seat.
 
-```{r plot3, dependson = "correct_by_seat"}
+```{r}
+#| label: plot3
+#| dependson: correct_by_seat
+
 correct_by_seats %>%
   group_by(passenger_rev) %>%
   summarize(mean = mean(prob)) %>%

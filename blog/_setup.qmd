@@ -1,0 +1,38 @@
+```{r}
+#| label: shared-setup
+#| include: false
+
+# Shared setup for every R blog post, pulled in with
+#   {{< include ../_setup.qmd >}}
+# Posts that need different settings (e.g. options(digits = 2)) override them
+# in their own chunk after the include.
+
+# Eager cache loading. Several posts cache multi-million-row frames, which
+# the default lazy loading chokes on.
+knitr::opts_chunk$set(cache.lazy = FALSE)
+options(digits = 4)
+
+# Match the site's typography. These names must resolve to the *static* TTF
+# builds: under ragg the variable-font builds ignore their weight axis, so
+# "light" and "heavy" would render identically.
+systemfonts::require_font("Commissioner", verbose = FALSE)
+systemfonts::register_variant(
+  "Commissioner Light",
+  family = "Commissioner", weight = "light"
+)
+systemfonts::register_variant(
+  "Fraunces Soft Light",
+  family = "Fraunces 72pt Soft", weight = "light"
+)
+
+# brand.yml::theme_brand_ggplot2() applies the palette from _brand.yml but
+# handles colors only, so the fonts are layered on here.
+brand_theme <- function(base_size = 16) {
+  brand.yml::theme_brand_ggplot2(base_size = base_size) +
+    ggplot2::theme(
+      text = ggplot2::element_text(family = "Commissioner Light"),
+      plot.title = ggplot2::element_text(family = "Fraunces Soft Light"),
+      plot.subtitle = ggplot2::element_text(family = "Fraunces Soft Light")
+    )
+}
+```

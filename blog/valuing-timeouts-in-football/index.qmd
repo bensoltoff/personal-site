@@ -1,6 +1,6 @@
 ---
 title: "Valuing Timeouts in Football"
-description: "What is the (Universal) Value of a Timeout?"
+description: "On December 27, the Pittsburgh Steelers were down 13-3 against their rivals, the Baltimore Ravens, after the first half. The Ravens opened the second half with the ball, but quickly punted the ball following a three-and-out drive."
 date: "2016-01-13"
 image: featured.jpg
 categories:
