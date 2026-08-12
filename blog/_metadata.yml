@@ -1,0 +1,18 @@
+# Defaults for every blog post.
+author: "Benjamin Soltoff"
+title-block-banner: false
+toc: true
+
+# Chunk caching complements freeze rather than duplicating it: freeze stops a
+# post re-executing across renders, cache stops expensive chunks re-running
+# within a render you triggered by editing the post. Several of these posts run
+# Monte Carlo simulations that take minutes.
+cache: true
+
+# The Hugo site showed warnings and messages inline (join messages, deprecation
+# notices, summarise() regrouping notes are all visible in the published posts),
+# so leave them on rather than quietly changing what these posts look like.
+execute:
+  warning: true
+  message: true
+  echo: true
