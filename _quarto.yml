@@ -1,12 +1,10 @@
 project:
   type: website
   output-dir: docs
-  # Only .qmd is ours. The explicit excludes keep Quarto out of the legacy Hugo
-  # trees while they still exist; they become no-ops once those are deleted.
+  # Only .qmd files are site content. temp/ holds standalone R scratch scripts
+  # and renv/ is library infrastructure; neither should ever be rendered.
   render:
     - "**/*.qmd"
-    - "!themes/**"
-    - "!content/**"
     - "!temp/**"
     - "!renv/**"
   preview:

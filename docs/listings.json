@@ -1,0 +1,37 @@
+[
+  {
+    "listing": "/project/index.html",
+    "items": [
+      "/project/info-5001/index.html",
+      "/project/info-2950/index.html",
+      "/project/info-3312/index.html",
+      "/project/css-skills/index.html",
+      "/project/cfss/index.html",
+      "/project/liveproject/index.html"
+    ]
+  },
+  {
+    "listing": "/blog/index.html",
+    "items": [
+      "/blog/can-you-defeat-the-detroit-lines/index.html",
+      "/blog/more-menorah-math/index.html",
+      "/blog/time-travel-for-the-lottery/index.html",
+      "/blog/can-you-bake-the-radish-pie/index.html",
+      "/blog/expect-one-perfect-game-per-season/index.html",
+      "/blog/can-you-find-the-fish-in-state-names/index.html",
+      "/blog/can-you-find-the-best-dungeons-dragons-strategy/index.html",
+      "/blog/how-good-are-you-at-guess-who/index.html",
+      "/blog/how-many-more-palindrome-dates-will-you-see/index.html",
+      "/blog/winning-the-world-chess-championship/index.html",
+      "/blog/cubs-world-series-puzzles-for-fun/index.html",
+      "/blog/a-modified-draft-pick-selection-order/index.html",
+      "/blog/can-you-best-the-mysterious-man-in-the-trench-coat/index.html",
+      "/blog/can-you-win-this-hot-new-game-show/index.html",
+      "/blog/will-someone-be-sitting-in-your-seat-on-the-plane/index.html",
+      "/blog/do-cops-pull-over-fewer-people-in-the-rain/index.html",
+      "/blog/valuing-timeouts-in-football-part-ii/index.html",
+      "/blog/valuing-timeouts-in-football/index.html",
+      "/blog/the-forrest-bounce-and-its-effect-on-triple-stumpers/index.html"
+    ]
+  }
+]

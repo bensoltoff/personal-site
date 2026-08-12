@@ -4,89 +4,94 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Benjamin Soltoff's personal website: a Hugo site managed with **blogdown**, using the vendored
-[hugo-apero](themes/hugo-apero) theme, deployed on Netlify from `main`.
+Benjamin Soltoff's personal website: a **Quarto** website with an R (knitr) engine, styled from a single
+`_brand.yml`, rendered to `docs/` and served by GitHub Pages. It was migrated from Hugo + blogdown; if you
+find instructions referring to `hugo`, `blogdown`, `config.toml`, or `content/`, they are stale.
 
-## Build and preview
+## Commands
 
-Hugo is **not on `PATH`**; blogdown manages a pinned copy at
-`~/Library/Application Support/Hugo/0.81.0/hugo`. The version is pinned in three places that must stay in
-sync: `.Rprofile` (`blogdown.hugo.version`), `netlify.toml` (`HUGO_VERSION`), and that installed directory.
-
-```r
-# from the project root, in R
-blogdown::serve_site()        # live preview with LiveReload (auto-runs on RStudio startup via .Rprofile)
-blogdown::build_site()        # full build: knit changed Rmd/Rmarkdown, then run Hugo into public/
-blogdown::build_site(build_rmd = "newfile")  # only knit source files with no/stale output
-blogdown::stop_server()
-blogdown::check_site()        # diagnose config/version problems
+```bash
+quarto preview          # local server with live reload
+quarto render           # full build into docs/
+quarto render blog/<slug>/index.qmd   # single post
 ```
 
-blogdown is not currently installed in the system library — `install.packages("blogdown")` first if
-`packageVersion("blogdown")` fails. Hugo-only commands (no knitting) go through `blogdown::hugo_build()`
-rather than a bare `hugo`, so the pinned binary is used.
+R dependencies are managed with **renv**. `.Rprofile` activates it automatically, so a plain `quarto
+render` uses the project library. After adding a package: `renv::snapshot()`. The lockfile uses snapshot
+type `all` because renv's dependency discovery is unreliable for a site whose packages appear only inside
+`.qmd` chunks.
 
-`public/` is gitignored; Netlify runs plain `hugo` (see `netlify.toml`) and never runs R.
+## Execution model: freeze *and* cache, deliberately
 
-## The critical build constraint
+Both are on, and they do different jobs. Do not remove one thinking it duplicates the other.
 
-**Netlify does not execute R.** Blog posts are written as `index.Rmarkdown` and knitted *locally* to
-`index.markdown` plus an `index_files/` directory of figures. Both the source and the generated output are
-committed to git — Hugo on Netlify only sees the `.markdown`. `config.toml`'s `ignoreFiles` excludes
-`\.Rmd$` and `\.Rmarkdown$` from the Hugo build for this reason.
+- **`execute: freeze: auto`** (`_quarto.yml`) — stops a post re-executing *across* renders. A post only
+  re-runs when its own `.qmd` changes. This is what keeps decade-old posts from being re-run on every
+  build. `_freeze/` is **committed**; without it, a fresh clone re-executes everything.
+- **`cache: true`** (`blog/_metadata.yml`) — knitr chunk caching, which stops expensive chunks re-running
+  *within* a render you did trigger. Several posts run Monte Carlo simulations taking minutes
+  (`can-you-find-the-best-dungeons-dragons-strategy` spends ~5 minutes in one chunk). Without cache,
+  fixing a typo means re-running the simulation. `*_cache/` is gitignored — it is a local accelerator
+  only, and it is large (200MB+).
 
-Consequences when editing a post:
+Chunks that depend on data produced by an earlier chunk need `dependson`, because knitr keys the cache on
+a chunk's own source text, not its upstream inputs. Most posts already declare this.
 
-- Editing `index.Rmarkdown` alone changes nothing on the live site. Re-knit and commit the regenerated
-  `index.markdown` and `index_files/` in the same commit.
-- Never hand-edit `index.markdown`; it is generated output.
-- Use `.Rmarkdown` (→ Markdown, figures as files) for new R-based posts, matching every existing post.
-  `.Rmd` would render to raw HTML instead (`blogdown.method = 'html'` in `.Rprofile`) and lose Hugo's
-  Markdown processing. Posts with no R code are plain `.markdown` with no source file.
-- Post chunks typically set `knitr::opts_chunk$set(cache = TRUE)`; `*_cache/` is gitignored, so a fresh
-  clone re-runs everything.
+## Old posts are frozen artifacts, not live code
 
-## Content layout
+Posts date back to 2014 and were last rendered in 2021 under R 4.0.4 with ggplot2 3.3.3. They now run
+under whatever `renv.lock` pins. Two consequences:
 
-Every content item is a Hugo **page bundle** — a directory containing `index.*` plus its own assets,
-named `content/blog/YYYY-MM-DD-slug/`. A `featured.jpg`/`featured.png`/`featured-hex.svg` in the bundle
-becomes the listing thumbnail and social card. Blog permalinks are `/blog/:slug/` (`[permalinks]` in
-`config.toml`), driven by the `slug` front-matter field, not the dated directory name.
+1. **Don't casually re-execute an old post.** Deleting its `_freeze/` entry means re-running 2016 code
+   against modern packages, and the output may legitimately differ from what is published.
+2. **If you must change old code to make it run, say so in the post.** The convention is a callout
+   directly beneath the front matter naming the specific change:
 
-Section index files (`content/*/_index.md`) hold **no body** — they exist to configure the section's
-layout (`layout: list-sidebar`, `list-grid`) and to `cascade:` front matter (author, byline, sidebar
-config, comments) onto every page in that section. Change display behavior for a whole section there
-rather than per-post.
+   ```markdown
+   ::: {.callout-note}
+   ## Code updated
 
-`content/about/` is unusual: `_index.md` cascades `headless: true` and the actual content lives in three
-sibling bundles — `header/`, `main/`, `sidebar/` — each a front-matter-only file that the theme's
-`about/list.html` assembles. Bio and title updates (the most common edit in this repo's history) touch all
-three.
+   This post was originally written in 2016 and was last rendered under R 4.0.4. The code has been
+   minimally updated to run under R 4.6.1: `dplyr::tbl_df()`, defunct since dplyr 1.0.0, was replaced
+   with `tibble::as_tibble()`. The analysis and its conclusions are unchanged.
+   :::
+   ```
 
-`mainSections = ["blog", "project", "talk"]` in `config.toml` controls what feeds listings; there is
-currently no `talk/` content.
+Four posts (`the-forrest-bounce-...`, `valuing-timeouts-in-football`, `...-part-ii`,
+`do-cops-pull-over-...`) have **no R source at all** — the originals were lost before the blogdown era.
+They carry `engine: markdown` so knitr never runs, and their figures are committed PNGs sitting in the
+post directory. Do not add executable chunks to them.
 
-## Theme and overrides
+`blog/_metadata.yml` deliberately leaves `warning: true` and `message: true`: the published Hugo posts
+show join messages and deprecation warnings inline, and suppressing them would silently change what these
+posts look like.
 
-`themes/hugo-apero/` is vendored in-tree (not a git submodule — `.gitmodules` is empty). Treat it as
-upstream: put customizations in the project's own `layouts/`, which shadows the theme file-for-file. Only
-three overrides exist today:
+## URLs are load-bearing
 
-- `layouts/partials/header.html` — copy of the theme header with `mathjax_support.html` appended
-- `layouts/partials/mathjax_support.html` — MathJax v3 config (`[params.math]` selects the renderer)
-- `layouts/shortcodes/blogdown/postref.html` — blogdown's cross-reference shortcode
+The site has been live for a decade. Post directories are named by **slug**, not date, so
+`blog/<slug>/index.qmd` serves `/blog/<slug>/` exactly as Hugo did. Root pages (`about.qmd` etc.) render
+to `/about.html` and carry `aliases:` to keep `/about/` working.
 
-Colors come from `params.theme = "plum"` (a built-in hugo-apero palette); a custom palette would be a
-`.scss` file in a project-level `assets/` folder named via `params.custom_theme`.
+Every post's `aliases:` list carries its legacy `/post/...` and `/r/...` URLs — 24 of them. Quarto turns
+each into a JS-redirect page in `docs/`. **Don't drop an alias when editing front matter.** Note aliases
+must not name the page's own URL; that collides with the real output file.
 
-## temp/
+`R/post-render.R` copies `docs/blog/index.xml` to `docs/index.xml`, because Hugo published a site-root
+feed that Quarto has no native equivalent for, and it recreates `docs/.nojekyll` (Quarto wipes the output
+directory each render).
 
-`temp/*.R` holds standalone scratch scripts for FiveThirtyEight Riddler puzzles. They are committed
-deliberately and are not part of the site build — several later became blog posts. Don't wire them into
-the build or "clean them up."
+## Layout
 
-## Editing config.toml
+```
+_quarto.yml     project config; render list is scoped to **/*.qmd
+_brand.yml      palette + typography (the old hugo-apero "plum" theme, preserved)
+custom.scss     what brand.yml can't express: type scale, uppercase nav, square buttons
+blog/           index.qmd is the listing; each post is blog/<slug>/index.qmd
+project/        index.qmd is a grid listing; each project is project/<name>/index.qmd
+docs/           build output, COMMITTED (GitHub Pages serves it)
+_freeze/        execution cache, COMMITTED
+temp/           standalone Riddler scratch scripts, unrelated to the build
+```
 
-Site-wide identity (title, social links, menus, analytics, taxonomies, privacy) all lives in
-`config.toml`. Header/footer navigation is `[[menu.header]]` / `[[menu.footer]]` entries ordered by
-`weight`.
+`docs/` and `_freeze/` are both tracked on purpose. Committing build output is unusual, but it is what
+lets GitHub Pages serve the site without running R in CI.

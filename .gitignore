@@ -59,7 +59,4 @@ LICENSE.html
 *.log
 *spark.log*
 
-# ignore public directory
-public/
-
 **/*.quarto_ipynb
