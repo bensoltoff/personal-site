@@ -1,0 +1,24 @@
+---
+title: "Computing for Information Science"
+subtitle: "INFO 5001"
+description: "This is an applied course for data scientists with little-to-no programming experience who wish to harness growing digital and computational resources. The focus of the course is on generating reproducible research using programming languages and version control software."
+date: "2023-01-21"
+author: "Benjamin Soltoff"
+image: featured-hex.svg
+categories:
+  - r
+  - courses
+  - data-science
+---
+
+::: {.project-links}
+<a class="btn-links" href="https://info5001.infosci.cornell.edu/" target="_blank" rel="noopener"><i class="bi bi-globe" aria-hidden="true"></i> website</a>
+<a class="btn-links" href="https://github.com/cis-ds/course-site-fa23" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i> code</a>
+:::
+
+
+![Computing for Information Science](https://info5001.infosci.cornell.edu/images/logo.svg)
+
+This is an applied course for data scientists with little-to-no programming experience who wish to harness growing digital and computational resources. The focus of the course is on generating reproducible research using programming languages and version control software. Major emphasis is placed on a pragmatic understanding of core principles of programming and packaged implementations of methods. Students will leave the course with basic computational skills implemented through many computational methods and approaches to data science; while students will not become expert programmers, they will gain the knowledge of how to adapt and expand these skills as they are presented with new questions, methods, and data.
+
+This course is a derivation of [MACS 30500](../cfss/index.qmd) and was originally taught in fall 2022 as INFO 5940. All course materials, including lecture notes, slides, and in-class exercises, are published under open-source license.

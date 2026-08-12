@@ -1,5 +1,28 @@
 ---
 title: "Benjamin Soltoff"
+subtitle: "Husband. Father. Human being."
+image: images/ben-soltoff.jpg
+image-alt: "Benjamin Soltoff"
+about:
+  template: solana
+  image-width: 22em
+  image-shape: rectangle
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:ben@bensoltoff.com
+      aria-label: Email
+    - icon: github
+      text: GitHub
+      href: https://github.com/bensoltoff
+      aria-label: GitHub
+    - icon: rss
+      text: RSS
+      href: blog/index.xml
+      aria-label: RSS
 ---
 
-Smoke test.
+I am a data scientist and educator. I teach undergraduate and graduate courses
+in computational social science, programming in R, and research methods.
+
+[Read More &rarr;](about.qmd){.btn-links}
