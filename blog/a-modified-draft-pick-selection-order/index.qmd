@@ -55,6 +55,8 @@ For each simulation, I randomly sample each team into one of `n_groups`, then ca
 So given the original problem setup, the expected draft positions for each team given random assignment into one of two groups is:
 
 ```{r}
+#| message: false
+
 draft_pick_sim(n_sims = 10000) %>%
   group_by(old) %>%
   summarize(mean = mean(new)) %>%
