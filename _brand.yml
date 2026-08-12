@@ -1,0 +1,68 @@
+meta:
+  name: Benjamin Soltoff
+  link:
+    home: https://www.bensoltoff.com
+
+logo:
+  small: images/icon-32.png
+  medium: images/icon-192.png
+
+# Palette carried over verbatim from the hugo-apero "plum" theme
+# (themes/hugo-apero/assets/theme/plum.scss). Names are the theme's own.
+color:
+  palette:
+    cultured: "#f6f7f9"
+    lavender-blush: "#e8d9db"
+    onyx: "#38383a"
+    rifle-green: "#414a37"
+    rosewood: "#5b0b15"
+    black-bean: "#490910"
+    persian-plum: "#6d0d19"
+    silver-pink: "#c4b1b2"
+    isabelline: "#f5f5f4"
+  background: cultured
+  foreground: onyx
+  primary: persian-plum
+  secondary: silver-pink
+  light: isabelline
+  dark: onyx
+  link: black-bean
+
+typography:
+  fonts:
+    # Self-hosted, copied out of the Hugo theme. The theme mapped Commissioner
+    # Light and Fraunces 9pt Soft Thin onto weight 400 and let the browser
+    # synthesize anything bolder; declaring them at 400 reproduces that exactly.
+    - family: Commissioner
+      source: file
+      files:
+        - path: assets/fonts/Commissioner-Light.woff2
+          weight: 400
+          style: normal
+        - path: assets/fonts/Commissioner-LightItalic.woff2
+          weight: 400
+          style: italic
+    - family: Fraunces
+      source: file
+      files:
+        - path: assets/fonts/Fraunces9ptSoft-Thin.woff2
+          weight: 400
+          style: normal
+        - path: assets/fonts/Fraunces9ptSoft-ThinItalic.woff2
+          weight: 400
+          style: italic
+  base:
+    family: Commissioner
+    size: 1rem
+    line-height: 1.5
+  headings:
+    family: Fraunces
+    weight: 400
+    line-height: 1.25
+    color: rosewood
+  link:
+    color: black-bean
+    decoration: underline
+  monospace:
+    family: Consolas
+    size: 0.875rem

@@ -61,3 +61,5 @@ LICENSE.html
 
 # ignore public directory
 public/
+
+**/*.quarto_ipynb
