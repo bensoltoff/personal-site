@@ -1,5 +1,6 @@
 ---
 title: "Can You Find The Best Dungeons & Dragons Strategy?"
+description: "I enjoyed the recent Riddler challenger from May 15th: The fifth edition of Dungeons & Dragons introduced a system of \"advantage and disadvantage.\" When you roll a die \"with advantage,\" you roll the die twice and keep the higher result."
 date: "2020-05-15"
 image: featured.jpg
 categories:
@@ -36,7 +37,22 @@ library(tidyverse)
 library(glue)
 set.seed(123)
 
-theme_set(theme_minimal(base_size = 18))
+# Use the same families and weights as the site. These resolve to static
+# TTFs; the variable-font builds ignore the weight axis under ragg.
+systemfonts::require_font("Commissioner", verbose = FALSE)
+systemfonts::register_variant("Commissioner Light",
+                              family = "Commissioner", weight = "light")
+systemfonts::register_variant("Fraunces Soft Light",
+                              family = "Fraunces 72pt Soft", weight = "light")
+
+theme_set(
+  brand.yml::theme_brand_ggplot2(base_size = 18) +
+    theme(
+      text = element_text(family = "Commissioner Light"),
+      plot.title = element_text(family = "Fraunces Soft Light"),
+      plot.subtitle = element_text(family = "Fraunces Soft Light")
+    )
+)
 ```
 
 ```{r functions}

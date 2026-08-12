@@ -1,155 +1,34 @@
 /*-- scss:defaults --*/
 
-// Carried over from hugo-apero "plum". _brand.yml drives the Bootstrap theme
-// colors; these are here for the rules layer, which needs a few of them in
-// places Bootstrap has no variable for.
-$plum-bg:            #f6f7f9;
-$plum-panel:         #e8d9db;
-$plum-text:          #38383a;
-$plum-display:       #414a37; // hero/display type
-$plum-heading:       #5b0b15;
-$plum-link:          #490910;
-$plum-nav:           #6d0d19;
-$plum-border:        #c4b1b2;
-$plum-button-text:   #f5f5f4;
+// _brand.yml supplies the palette and font families; this file only fills the
+// gaps brand.yml cannot express. Keep it small -- the layout is Quarto's.
 
-// The old theme used a tachyons scale rather than Bootstrap's type ramp.
-$h1-font-size: 3rem;
-$h2-font-size: 2.25rem;
-$h3-font-size: 1.5rem;
-$h4-font-size: 1.25rem;
-$h5-font-size: 1rem;
-$h6-font-size: 0.875rem;
-$headings-line-height: 1.25;
-
-$border-radius:    0;
-$border-radius-sm: 0;
-$border-radius-lg: 0;
-$border-color:     $plum-border;
-
-$navbar-light-color:        $plum-nav;
-$navbar-light-hover-color:  $plum-link;
-$navbar-light-active-color: $plum-link;
+// The self-hosted brand fonts ship with no fallback of their own, so name one
+// here in case a woff2 fails to load.
+$font-family-sans-serif: Commissioner, -apple-system, BlinkMacSystemFont,
+  "Segoe UI", Helvetica, Arial, sans-serif !default;
 
 /*-- scss:rules --*/
 
-// hugo-apero set no fallbacks at all; add them so a failed font load degrades
-// to something reasonable rather than to the browser default serif.
-body {
-  font-family: Commissioner, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Helvetica, Arial, sans-serif;
-}
-
 h1, h2, h3, h4, h5, h6,
-.navbar-brand, .quarto-title .title {
+.navbar-brand,
+.quarto-title .title {
   font-family: Fraunces, Georgia, serif;
 }
 
-// Nav links and small labels were uppercase with wide tracking.
-.navbar-nav .nav-link,
-.nav-footer a,
-.quarto-listing .listing-categories .listing-category,
-.quarto-category {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.875rem;
+// Listing cards: the title is the link, so only it should read as one. Quarto
+// already marks the description `.delink`; without this the card's wrapping
+// anchor underlines the blurb and subtitle too.
+.quarto-grid-item .listing-description,
+.quarto-grid-item .listing-subtitle,
+.quarto-post .listing-description,
+.quarto-post .listing-subtitle,
+.listing-description a,
+.listing-subtitle a {
+  text-decoration: none;
 }
 
-.navbar {
-  background-color: $plum-bg !important;
-  border-bottom: 1px solid transparent;
-}
-
-// Body links kept their underline; nav and brand links did not.
-main a:not(.btn):not(.nav-link):not(.quarto-title-meta-contents a) {
-  color: $plum-link;
+.quarto-grid-item .listing-title,
+.quarto-post .listing-title {
   text-decoration: underline;
-}
-
-.navbar-brand,
-.navbar-nav .nav-link {
-  text-decoration: none;
-}
-
-// Project "links:" buttons: square, outlined, uppercase, filling on hover.
-.btn-links,
-.about-links .about-link {
-  display: inline-block;
-  border: 1px solid $plum-border;
-  border-radius: 0;
-  padding: 0.5rem 1rem;
-  margin: 0 0.5rem 0.75rem 0;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: $plum-heading;
-  background-color: transparent;
-  text-decoration: none;
-  transition: background-color 0.15s ease-in, color 0.15s ease-in;
-
-  &:hover {
-    background-color: $plum-link;
-    color: $plum-button-text;
-    text-decoration: none;
-  }
-}
-
-// The tinted band the old sidebar and about column sat on.
-.quarto-about-trestles .about-entity,
-.quarto-about-solana .about-entity,
-.callout.callout-style-default .callout-body {
-  background-color: $plum-panel;
-}
-
-.quarto-about-trestles .about-entity,
-.quarto-about-solana .about-entity {
-  padding: 2rem 1.5rem;
-}
-
-// Hero/display type was rifle green, not the heading rosewood.
-.quarto-about-jolla .about-entity + div > h1,
-.quarto-about-solana .about-contents > h1:first-child,
-#title-block-header.quarto-title-block.default .quarto-title h1.title {
-  color: $plum-display;
-}
-
-// Content measures: 48rem for prose, wider for listings.
-main.content {
-  max-width: 48rem;
-}
-
-.quarto-listing,
-body.quarto-listing-page main.content {
-  max-width: 64rem;
-}
-
-// Listing cards echoed the old summary articles: hairline rule, generous gap.
-.quarto-listing-default .list-item {
-  border-bottom: 1px solid $plum-border;
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
-}
-
-.quarto-grid-item {
-  border: 1px solid $plum-border;
-  border-radius: 0;
-}
-
-pre {
-  border: 1px solid #ebebeb;
-  border-radius: 0.125rem;
-  padding: 1rem;
-  background-color: transparent;
-}
-
-code:not(pre code) {
-  background-color: rgba(255, 255, 255, 0.5);
-  font-size: 0.875rem;
-}
-
-.nav-footer {
-  border-top: 1px solid transparent;
-  font-size: 0.875rem;
-  color: $plum-text;
 }

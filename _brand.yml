@@ -7,8 +7,11 @@ logo:
   small: images/icon-32.png
   medium: images/icon-192.png
 
-# Palette carried over verbatim from the hugo-apero "plum" theme
-# (themes/hugo-apero/assets/theme/plum.scss). Names are the theme's own.
+# Palette carried over from the old hugo-apero "plum" theme. Names are its own.
+#
+# Note: no `link:` key here. Quarto's brand schema accepts color.link, but the
+# brand.yml R package (used for theme_brand_ggplot2) rejects it, and both have
+# to read this same file. Links fall back to `primary`.
 color:
   palette:
     cultured: "#f6f7f9"
@@ -26,13 +29,11 @@ color:
   secondary: silver-pink
   light: isabelline
   dark: onyx
-  link: black-bean
 
 typography:
   fonts:
-    # Self-hosted, copied out of the Hugo theme. The theme mapped Commissioner
-    # Light and Fraunces 9pt Soft Thin onto weight 400 and let the browser
-    # synthesize anything bolder; declaring them at 400 reproduces that exactly.
+    # Self-hosted, carried over from the old theme, which mapped Commissioner
+    # Light and Fraunces 9pt Soft Thin onto weight 400.
     - family: Commissioner
       source: file
       files:
@@ -53,16 +54,13 @@ typography:
           style: italic
   base:
     family: Commissioner
-    size: 1rem
     line-height: 1.5
   headings:
     family: Fraunces
     weight: 400
-    line-height: 1.25
     color: rosewood
-  link:
-    color: black-bean
-    decoration: underline
-  monospace:
-    family: Consolas
-    size: 0.875rem
+  # Monospace is deliberately left unset. Naming a single family here emits
+  # `font-family: Consolas` with no fallback, so any machine without Consolas
+  # drops to the browser default serif. Quarto's own stack (SFMono-Regular,
+  # Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace) is
+  # sans-serif everywhere, which is what the old site rendered.

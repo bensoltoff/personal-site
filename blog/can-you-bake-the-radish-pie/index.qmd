@@ -48,7 +48,22 @@ Full disclosure: I knew it was a sequence, but didn't bother thinking of it math
 library(tidyverse)
 library(gganimate)
 
-theme_set(theme_minimal(base_size = 18))
+# Use the same families and weights as the site. These resolve to static
+# TTFs; the variable-font builds ignore the weight axis under ragg.
+systemfonts::require_font("Commissioner", verbose = FALSE)
+systemfonts::register_variant("Commissioner Light",
+                              family = "Commissioner", weight = "light")
+systemfonts::register_variant("Fraunces Soft Light",
+                              family = "Fraunces 72pt Soft", weight = "light")
+
+theme_set(
+  brand.yml::theme_brand_ggplot2(base_size = 18) +
+    theme(
+      text = element_text(family = "Commissioner Light"),
+      plot.title = element_text(family = "Fraunces Soft Light"),
+      plot.subtitle = element_text(family = "Fraunces Soft Light")
+    )
+)
 ```
 
 First I need a function to apply the algorithm for any given initial guess.

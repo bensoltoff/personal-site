@@ -13,4 +13,4 @@ The best way to reach me is by email.
 
 I am happy to hear from you about teaching, consulting, or custom training and
 research services. For more on what I can offer, see
-[my about page](about.qmd).
+[my about page](index.qmd).

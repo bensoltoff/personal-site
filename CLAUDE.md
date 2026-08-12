@@ -37,6 +37,16 @@ Both are on, and they do different jobs. Do not remove one thinking it duplicate
 Chunks that depend on data produced by an earlier chunk need `dependson`, because knitr keys the cache on
 a chunk's own source text, not its upstream inputs. Most posts already declare this.
 
+**Changing the ggplot theme requires wiping the caches.** `theme_set()` in the setup chunk is a global
+side effect that knitr's cache cannot see: the plotting chunks' own source is unchanged and their
+`dependson` points at data chunks, so they are restored from cache and silently keep their *old* figures.
+Editing the theme and re-rendering looks like it worked and changes nothing. After any theme change:
+
+```bash
+find blog -maxdepth 2 -type d -name "*_cache" -exec rm -rf {} +
+rm -rf _freeze docs .quarto && quarto render
+```
+
 ## Old posts are frozen artifacts, not live code
 
 Posts date back to 2014 and were last rendered in 2021 under R 4.0.4 with ggplot2 3.3.3. They now run
@@ -76,22 +86,67 @@ Every post's `aliases:` list carries its legacy `/post/...` and `/r/...` URLs �
 each into a JS-redirect page in `docs/`. **Don't drop an alias when editing front matter.** Note aliases
 must not name the page's own URL; that collides with the real output file.
 
-`R/post-render.R` copies `docs/blog/index.xml` to `docs/index.xml`, because Hugo published a site-root
-feed that Quarto has no native equivalent for, and it recreates `docs/.nojekyll` (Quarto wipes the output
-directory each render).
+There is no separate about page — `index.qmd` *is* the about page (Quarto's `trestles` template) and
+carries `aliases: [/about/]` for the old Hugo URL.
+
+Hugo published a site feed at `/index.xml`; Quarto only emits feeds for listing pages, so the feed now
+lives at `/blog/index.xml` only. This is a deliberate, accepted break.
 
 ## Layout
 
 ```
 _quarto.yml     project config; render list is scoped to **/*.qmd
-_brand.yml      palette + typography (the old hugo-apero "plum" theme, preserved)
-custom.scss     what brand.yml can't express: type scale, uppercase nav, square buttons
+_brand.yml      palette + fonts (colors/typography from the old "plum" theme)
+custom.scss     small: font fallbacks and listing underline rules. Keep it small.
+index.qmd       the about page AND the home page
 blog/           index.qmd is the listing; each post is blog/<slug>/index.qmd
 project/        index.qmd is a grid listing; each project is project/<name>/index.qmd
 docs/           build output, COMMITTED (GitHub Pages serves it)
 _freeze/        execution cache, COMMITTED
+.nojekyll       stops GitHub Pages running the output through Jekyll
 temp/           standalone Riddler scratch scripts, unrelated to the build
 ```
 
 `docs/` and `_freeze/` are both tracked on purpose. Committing build output is unusual, but it is what
 lets GitHub Pages serve the site without running R in CI.
+
+The layout is stock Quarto — resist rebuilding the old Hugo theme's layouts in `custom.scss`.
+
+## `_brand.yml` is read by two different consumers
+
+Quarto reads it for site styling, and the **brand.yml R package** reads the same file to theme plots via
+`brand.yml::theme_brand_ggplot2()`, which posts call in their setup chunk. Their schemas are not
+identical, so:
+
+- **Do not add `color.link` or `typography.link`.** Quarto accepts them; the R package errors with
+  `Unexpected fields in color: "link"`, which breaks every plot. Links fall back to `primary`.
+- **Do not set `typography.monospace.family` to a bare family name.** It emits `font-family: Consolas`
+  with no fallback, so machines without Consolas drop to the browser's default *serif* for code. Leaving
+  it unset gives Quarto's sans-serif monospace stack, which is what the old site had.
+
+The R package needs `prismatic` installed; it is a soft dependency that `theme_brand_ggplot2()` requires
+at call time.
+
+### Fonts in plots take three pieces, not one
+
+`theme_brand_ggplot2()` (brand.yml 0.1.0) is **colors only** — its function body never mentions `family`
+or `font`. Setting `source: google` in `_brand.yml` does *not* change this. So plot fonts are wired up
+separately, and all three pieces are required:
+
+1. `knitr: opts_chunk: dev: ragg_png` in `_quarto.yml`. ragg renders via systemfonts; the default
+   grDevices `png` cannot see fonts registered at runtime.
+2. `systemfonts::register_variant(...)` in each plotting post's setup chunk, naming the weights the site
+   uses — Commissioner **Light** and Fraunces 72pt Soft **Light**.
+3. An explicit `theme(text = element_text(family = "Commissioner Light"), plot.title =
+   element_text(family = "Fraunces Soft Light"))` added to the brand theme.
+
+Remove any one of the three and plots silently fall back to the device default sans-serif — no error.
+
+**Install the static TTF builds of both families, not the variable-font builds.** Under ragg the variable
+builds ignore their weight axis entirely: `register_variant(weight = "ultralight")` and
+`weight = "heavy")` render identically, so plot titles come out in a heavy display weight that clashes
+with the site's thin headings. With the static builds installed, `weight = "light"` resolves to
+`Commissioner-Light.ttf` and `Fraunces_72pt_Soft-Light.ttf` and the plots match the site.
+
+Note the family is `Fraunces 72pt Soft` (the static name), not `Fraunces` — plain `Fraunces` resolves to
+the variable file. Also note "Thin" registers under weight `light`, not `ultralight`, in this family.

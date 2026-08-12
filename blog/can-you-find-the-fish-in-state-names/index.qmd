@@ -1,5 +1,6 @@
 ---
 title: "Can You Find The Fish In State Names?"
+description: "The recent Riddler classic offered this intriguing challenge: Ohio is the only state whose name doesnt share any letters with the word \"mackerel.\" Its strange, but its true."
 date: "2020-05-22"
 image: featured.jpg
 categories:
@@ -39,7 +40,22 @@ In order to do that, I tokenized each word at the character-level, then compared
 library(tidyverse)
 library(tidytext)
 
-theme_set(theme_minimal(base_size = 18))
+# Use the same families and weights as the site. These resolve to static
+# TTFs; the variable-font builds ignore the weight axis under ragg.
+systemfonts::require_font("Commissioner", verbose = FALSE)
+systemfonts::register_variant("Commissioner Light",
+                              family = "Commissioner", weight = "light")
+systemfonts::register_variant("Fraunces Soft Light",
+                              family = "Fraunces 72pt Soft", weight = "light")
+
+theme_set(
+  brand.yml::theme_brand_ggplot2(base_size = 18) +
+    theme(
+      text = element_text(family = "Commissioner Light"),
+      plot.title = element_text(family = "Fraunces Soft Light"),
+      plot.subtitle = element_text(family = "Fraunces Soft Light")
+    )
+)
 ```
 
 First we retrieve the dictionary of words. R already includes state names as the `state.name` constant.

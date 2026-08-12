@@ -10,11 +10,16 @@ project:
   preview:
     port: 4200
     browser: false
-  post-render:
-    - R/post-render.R
 
 execute:
   freeze: auto
+
+# ragg renders through systemfonts, which is what lets plots use the brand
+# fonts. The default grDevices png cannot see fonts registered at runtime.
+knitr:
+  opts_chunk:
+    dev: ragg_png
+    dpi: 150
 
 website:
   title: "Benjamin Soltoff"
@@ -27,8 +32,6 @@ website:
     logo: images/icon-192.png
     title: false
     left:
-      - text: About
-        href: about.qmd
       - text: Blog
         href: blog/index.qmd
       - text: Projects
