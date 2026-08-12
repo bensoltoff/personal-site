@@ -295,7 +295,7 @@ S &amp;= 3 \\
 <p>Next I want to apply this function for any initial estimate, applying it to each successive estimate until I converge to a stable estimate (as defined by the <code>tolerance</code> threshold):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate sequence of measurements</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>flour_needed <span class="ot">&lt;-</span> <span class="cf">function</span>(initial_guess, <span class="at">tolerance =</span> <span class="fl">0.001</span>){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>flour_needed <span class="ot">&lt;-</span> <span class="cf">function</span>(initial_guess, <span class="at">tolerance =</span> <span class="fl">0.001</span>) {</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># placeholder for measurements</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  flour_seq <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"numeric"</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -304,7 +304,7 @@ S &amp;= 3 \\
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  converged <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  flour_seq[[i]] <span class="ot">&lt;-</span> initial_guess</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(<span class="sc">!</span>converged) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (<span class="sc">!</span>converged) {</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># increment i</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> i <span class="sc">+</span> <span class="dv">1</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
@@ -312,7 +312,7 @@ S &amp;= 3 \\
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    flour_seq[[i]] <span class="ot">&lt;-</span> <span class="fu">flour_start</span>(<span class="at">step_1 =</span> flour_seq[[i <span class="sc">-</span> <span class="dv">1</span>]])</span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if new amount is same as original amount, stop</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">abs</span>(flour_seq[[i]] <span class="sc">-</span> flour_seq[[i <span class="sc">-</span> <span class="dv">1</span>]]) <span class="sc">&lt;</span> tolerance) {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(flour_seq[[i]] <span class="sc">-</span> flour_seq[[i <span class="sc">-</span> <span class="dv">1</span>]]) <span class="sc">&lt;</span> tolerance) {</span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      converged <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  }</span>
@@ -328,144 +328,31 @@ S &amp;= 3 \\
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flour_trials <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">initial_flour =</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="fl">1e03</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">100</span>)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">.id =</span> <span class="fu">row_number</span>(),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">flour_seq =</span> <span class="fu">map</span>(<span class="at">.x =</span> initial_flour, <span class="at">.f =</span> flour_needed)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># restructure for tidy analysis</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> flour_seq) <span class="sc">%&gt;%</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.id =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">flour_seq =</span> <span class="fu">map</span>(<span class="at">.x =</span> initial_flour, <span class="at">.f =</span> flour_needed)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># restructure for tidy analysis</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> flour_seq) <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>How does it perform?</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># animate the measurements</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> flour_trials, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> n_id, <span class="at">y =</span> flour_seq, <span class="at">group =</span> .id)) <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> .<span class="dv">02</span>) <span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Baking a radish pie"</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Iteration"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Amount of flour required"</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Each line is a separate simulation"</span>) <span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_reveal</span>(<span class="at">along =</span> n_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_line()`: Each group consists of only one observation.
-ℹ Do you need to adjust the group aesthetic?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): no font could
-be found for family "Fraunces Soft Light"</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"
-Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : no
-font could be found for family "Fraunces Soft Light"</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_line()`: Each group consists of only one observation.
-ℹ Do you need to adjust the group aesthetic?</code></pre>
-</div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> flour_trials,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> n_id, <span class="at">y =</span> flour_seq, <span class="at">group =</span> .id)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> .<span class="dv">02</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Baking a radish pie"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Iteration"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Amount of flour required"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Each line is a separate simulation"</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_reveal</span>(<span class="at">along =</span> n_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -473,18 +360,20 @@ font could be found for family "Fraunces Soft Light"</code></pre>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># how quick to converge?</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>flour_trials <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">iter =</span> <span class="fu">max</span>(n_id)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(iter) <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_pct =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> iter, <span class="at">y =</span> n_pct)) <span class="sc">+</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Baking a radish pie"</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number of iterations until convergence"</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># how quick to converge?</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>flour_trials <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.id) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">iter =</span> <span class="fu">max</span>(n_id)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(iter) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_pct =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> iter, <span class="at">y =</span> n_pct)) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Baking a radish pie"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Number of iterations until convergence"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

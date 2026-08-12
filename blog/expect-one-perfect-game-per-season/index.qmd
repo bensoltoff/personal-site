@@ -8,6 +8,7 @@ categories:
 ---
 
 {{< include ../_setup.qmd >}}
+
 The recent [Riddler Express](https://fivethirtyeight.com/features/can-you-crack-the-case-of-the-crystal-key/) deals with the increasing rate of no-hitters in the MLB:
 
 > As of this week, there have already been six no-hitters this MLB season, well on pace to break the record for no-hitters for a season in the modern era, which stands at nine in 1990.
@@ -76,7 +77,10 @@ perfect_games_season <- perfect_games %>%
   # expected number of perfect games in an entire season
   mutate(prob_at_least_one = n_games * prob_perfect_game)
 
-ggplot(data = perfect_games_season, mapping = aes(x = obp, y = prob_at_least_one)) +
+ggplot(
+  data = perfect_games_season,
+  mapping = aes(x = obp, y = prob_at_least_one)
+) +
   geom_line() +
   labs(
     title = "Expected number of perfect games",
@@ -96,7 +100,10 @@ obp_1 <- filter(perfect_games_season, prob_at_least_one >= 1) %>%
   pull(obp) %>%
   max()
 
-ggplot(data = perfect_games_season, mapping = aes(x = obp, y = prob_at_least_one)) +
+ggplot(
+  data = perfect_games_season,
+  mapping = aes(x = obp, y = prob_at_least_one)
+) +
   geom_line() +
   geom_vline(xintercept = obp_1, linetype = 2, alpha = .5) +
   scale_y_continuous(limits = c(0, 20)) +

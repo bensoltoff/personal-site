@@ -10,6 +10,7 @@ aliases:
 ---
 
 {{< include ../_setup.qmd >}}
+
 I'm currently on paternity leave and in search of quick but interesting programming challenges to stay fresh. The [latest Riddler Express](https://fivethirtyeight.com/features/how-many-more-palindrome-dates-will-you-see/) provided a quick refresher on string manipulation.
 
 > If we write out dates in the American format of MM/DD/YYYY (i.e., the two digits of the month, followed by the two digits of the day, followed by the four digits of the year), how many more palindromic dates will there be this century?

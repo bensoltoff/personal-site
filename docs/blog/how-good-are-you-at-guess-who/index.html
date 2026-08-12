@@ -277,8 +277,12 @@ window.Quarto = {
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pieces <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="at">times =</span> <span class="dv">5</span>), <span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="at">times =</span> <span class="dv">4</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>all_outcomes <span class="ot">&lt;-</span> gtools<span class="sc">::</span><span class="fu">permutations</span>(<span class="at">n =</span> <span class="fu">length</span>(pieces), <span class="at">r =</span> <span class="fu">length</span>(pieces), <span class="at">v =</span> <span class="fu">seq_along</span>(pieces))</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(all_outcomes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>all_outcomes <span class="ot">&lt;-</span> gtools<span class="sc">::</span><span class="fu">permutations</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="fu">length</span>(pieces),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">r =</span> <span class="fu">length</span>(pieces),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">v =</span> <span class="fu">seq_along</span>(pieces)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(all_outcomes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
 [1,]    1    2    3    4    5    6    7    8    9
@@ -311,33 +315,44 @@ window.Quarto = {
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>tic_tac_toe <span class="ot">&lt;-</span> <span class="cf">function</span>(game_board, <span class="at">print_board =</span> <span class="cn">FALSE</span>) {</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># generate random assortment</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  game_board <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> game_board, <span class="at">nrow =</span> <span class="dv">3</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print_board) <span class="fu">print</span>(game_board)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># check if any row or colsums or diag or inverse diag are 3</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if TRUE, also confirm none are -3</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">colSums</span>(game_board) <span class="sc">||</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">rowSums</span>(game_board) <span class="sc">||</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">diag</span>(game_board)) <span class="sc">==</span> <span class="dv">3</span> <span class="sc">||</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">diag</span>(<span class="fu">rotate</span>(game_board))) <span class="sc">==</span> <span class="dv">3</span>) {</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">colSums</span>(game_board) <span class="sc">||</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">rowSums</span>(game_board) <span class="sc">||</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">diag</span>(game_board)) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">||</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">diag</span>(<span class="fu">rotate</span>(game_board))) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span>) {</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="st">"Draw"</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"X wins"</span>)</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">colSums</span>(game_board) <span class="sc">||</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">rowSums</span>(game_board) <span class="sc">||</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">diag</span>(game_board)) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">||</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">diag</span>(<span class="fu">rotate</span>(game_board))) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span>) {</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"O wins"</span>)</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"Draw"</span>)</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="fu">tic_tac_toe</span>(all_outcomes[<span class="dv">1</span>, ], <span class="at">print_board =</span> <span class="cn">TRUE</span>) <span class="co"># test the function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (print_board) {</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(game_board)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># check if any row or colsums or diag or inverse diag are 3</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if TRUE, also confirm none are -3</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span> <span class="sc">%in%</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">colSums</span>(game_board) <span class="sc">||</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">rowSums</span>(game_board) <span class="sc">||</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">diag</span>(game_board)) <span class="sc">==</span> <span class="dv">3</span> <span class="sc">||</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">diag</span>(<span class="fu">rotate</span>(game_board))) <span class="sc">==</span> <span class="dv">3</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  ) {</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">colSums</span>(game_board) <span class="sc">||</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">rowSums</span>(game_board) <span class="sc">||</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(<span class="fu">diag</span>(game_board)) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">||</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sum</span>(<span class="fu">diag</span>(<span class="fu">rotate</span>(game_board))) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    ) {</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="st">"Draw"</span>)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"X wins"</span>)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">colSums</span>(game_board) <span class="sc">||</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span><span class="dv">3</span> <span class="sc">%in%</span> <span class="fu">rowSums</span>(game_board) <span class="sc">||</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">diag</span>(game_board)) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">||</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="fu">diag</span>(<span class="fu">rotate</span>(game_board))) <span class="sc">==</span> <span class="sc">-</span><span class="dv">3</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  ) {</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"O wins"</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">"Draw"</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="fu">tic_tac_toe</span>(all_outcomes[<span class="dv">1</span>, ], <span class="at">print_board =</span> <span class="cn">TRUE</span>) <span class="co"># test the function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
 [1,]    1    1   -1

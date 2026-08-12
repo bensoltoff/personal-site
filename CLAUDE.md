@@ -151,6 +151,12 @@ separately, and all three pieces are required:
 
 Remove any one of the three and plots silently fall back to the device default sans-serif — no error.
 
+**The setup chunk in `blog/_setup.qmd` must stay `cache: false`.** `register_variant()` is a *session
+side effect*, not a value. If that chunk is cached, a cache hit restores the `brand_theme` function
+object but never re-runs the registration, so the font alias does not exist in that session and every
+plot title silently falls back. The failure looks like "the theme stopped working" and appears only on
+re-renders, never on a clean build.
+
 **Install the static TTF builds of both families, not the variable-font builds.** Under ragg the variable
 builds ignore their weight axis entirely: `register_variant(weight = "ultralight")` and
 `weight = "heavy")` render identically, so plot titles come out in a heavy display weight that clashes

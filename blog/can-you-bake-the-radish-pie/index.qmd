@@ -71,7 +71,7 @@ Next I want to apply this function for any initial estimate, applying it to each
 #| label: flour-needed
 
 # generate sequence of measurements
-flour_needed <- function(initial_guess, tolerance = 0.001){
+flour_needed <- function(initial_guess, tolerance = 0.001) {
   # placeholder for measurements
   flour_seq <- vector(mode = "numeric")
 
@@ -80,7 +80,7 @@ flour_needed <- function(initial_guess, tolerance = 0.001){
   converged <- FALSE
   flour_seq[[i]] <- initial_guess
 
-  while(!converged) {
+  while (!converged) {
     # increment i
     i <- i + 1
 
@@ -88,7 +88,7 @@ flour_needed <- function(initial_guess, tolerance = 0.001){
     flour_seq[[i]] <- flour_start(step_1 = flour_seq[[i - 1]])
 
     # if new amount is same as original amount, stop
-    if(abs(flour_seq[[i]] - flour_seq[[i - 1]]) < tolerance) {
+    if (abs(flour_seq[[i]] - flour_seq[[i - 1]]) < tolerance) {
       converged <- TRUE
     }
   }
@@ -109,8 +109,10 @@ set.seed(123)
 flour_trials <- tibble(
   initial_flour = runif(n = 1e03, min = 0, max = 100)
 ) %>%
-  mutate(.id = row_number(),
-         flour_seq = map(.x = initial_flour, .f = flour_needed)) %>%
+  mutate(
+    .id = row_number(),
+    flour_seq = map(.x = initial_flour, .f = flour_needed)
+  ) %>%
   # restructure for tidy analysis
   unnest(cols = flour_seq) %>%
   group_by(.id) %>%
@@ -123,14 +125,20 @@ How does it perform?
 ```{r}
 #| label: trials-viz
 #| dependson: trials
+#| warning: false
 
 # animate the measurements
-ggplot(data = flour_trials, mapping = aes(x = n_id, y = flour_seq, group = .id)) +
+ggplot(
+  data = flour_trials,
+  mapping = aes(x = n_id, y = flour_seq, group = .id)
+) +
   geom_line(alpha = .02) +
-  labs(title = "Baking a radish pie",
-       x = "Iteration",
-       y = "Amount of flour required",
-       caption = "Each line is a separate simulation") +
+  labs(
+    title = "Baking a radish pie",
+    x = "Iteration",
+    y = "Amount of flour required",
+    caption = "Each line is a separate simulation"
+  ) +
   transition_reveal(along = n_id)
 
 # how quick to converge?
@@ -142,9 +150,11 @@ flour_trials %>%
   ggplot(mapping = aes(x = iter, y = n_pct)) +
   geom_col() +
   scale_y_continuous(labels = scales::percent) +
-  labs(title = "Baking a radish pie",
-       x = "Number of iterations until convergence",
-       y = NULL)
+  labs(
+    title = "Baking a radish pie",
+    x = "Number of iterations until convergence",
+    y = NULL
+  )
 ```
 
 All the trials converged to the same estimate of `r sqrt(3)` give or take three decimal places.

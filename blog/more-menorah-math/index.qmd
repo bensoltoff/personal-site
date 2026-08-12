@@ -8,6 +8,7 @@ categories:
 ---
 
 {{< include ../_setup.qmd >}}
+
 This week's [Riddler Express](https://fivethirtyeight.com/features/can-you-slice-the-ice/) deals with some menorah math that provides a good application for combinatorics:
 
 > Tonight marks the sixth night of Hanukkah, which means it's time for some more Menorah Math!

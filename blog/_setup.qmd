@@ -1,6 +1,7 @@
 ```{r}
 #| label: shared-setup
 #| include: false
+#| cache: false
 
 # Shared setup for every R blog post, pulled in with
 #   {{< include ../_setup.qmd >}}

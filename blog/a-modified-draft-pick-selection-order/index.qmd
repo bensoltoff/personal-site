@@ -11,6 +11,7 @@ aliases:
 ---
 
 {{< include ../_setup.qmd >}}
+
 ```{r}
 #| label: post-settings
 #| include: false
@@ -34,7 +35,7 @@ The main task is to write a function that calculates the new draft position for 
 
 library(tidyverse)
 
-draft_pick_sim <- function(n_teams = 30, n_groups = 2, n_sims = 100){
+draft_pick_sim <- function(n_teams = 30, n_groups = 2, n_sims = 100) {
   old <- 1:n_teams
 
   sims <- replicate(n_sims, sample(1:n_groups, n_teams, replace = T)) %>%
@@ -44,7 +45,7 @@ draft_pick_sim <- function(n_teams = 30, n_groups = 2, n_sims = 100){
     group_by(sim) %>%
     arrange(sim, outcome, old) %>%
     mutate(new = row_number())
-  
+
   return(sims)
 }
 ```
@@ -57,9 +58,10 @@ So given the original problem setup, the expected draft positions for each team 
 draft_pick_sim(n_sims = 10000) %>%
   group_by(old) %>%
   summarize(mean = mean(new)) %>%
-  knitr::kable(caption = "Expected Draft Position (based on 10,000 simulations)",
-               col.names = c("Original Draft Position",
-                             "Expected Draft Position"))
+  knitr::kable(
+    caption = "Expected Draft Position (based on 10,000 simulations)",
+    col.names = c("Original Draft Position", "Expected Draft Position")
+  )
 ```
 
 The team originally with the 10th draft can expect to have the *13th pick* under this new approach.

@@ -11,6 +11,7 @@ aliases:
 ---
 
 {{< include ../_setup.qmd >}}
+
 [This week's Riddler Express from FiveThirtyEight](https://fivethirtyeight.com/features/the-riddler-just-had-to-go-and-reinvent-beer-pong/):
 
 > The World Chess Championship is underway. It is a 12-game match between the world’s top two grandmasters. Many chess fans feel that 12 games is far too short for a biennial world championship match, allowing too much variance.
@@ -32,27 +33,25 @@ theme_set(brand_theme(18))
 ```{r}
 #| label: chess-func
 
-chess_outcomes <- function(n_matches, prob){
+chess_outcomes <- function(n_matches, prob) {
   # define all possibilities
-  X <- expand.grid(n = 0:n_matches,
-                   k = 0:3) %>%
+  X <- expand.grid(n = 0:n_matches, k = 0:3) %>%
     as.matrix %>%
     t
   X <- X[, colSums(X) <= n_matches]
   X <- rbind(X, n_matches:n_matches - colSums(X))
   dimnames(X) <- list(c("win", "lose", "draw"), NULL)
-  
+
   # calculate probabilities of each outcome
   X_prob <- array_branch(X, margin = 2) %>%
     map_dbl(dmultinom, prob = prob)
-  
+
   # combine together
   outcomes <- X %>%
     t %>%
     as_tibble %>%
-    mutate(points = win * 1 + lose * 0 + draw * .5,
-           prob = X_prob)
-  
+    mutate(points = win * 1 + lose * 0 + draw * .5, prob = X_prob)
+
   return(outcomes)
 }
 ```
@@ -62,10 +61,12 @@ chess_outcomes <- function(n_matches, prob){
 
 # iterate over a varying number of matches
 varying_matches <- tibble(n_matches = 1:300) %>%
-  mutate(outcomes = map(n_matches, chess_outcomes, prob = c(0.2, 0.15, 0.65)),
-         prob_win = map2_dbl(outcomes, n_matches, ~ mean(.x$points > (.y / 2))),
-         prob_draw = map2_dbl(outcomes, n_matches, ~ mean(.x$points == (.y / 2))),
-         prob_loss = map2_dbl(outcomes, n_matches, ~ mean(.x$points < (.y / 2))))
+  mutate(
+    outcomes = map(n_matches, chess_outcomes, prob = c(0.2, 0.15, 0.65)),
+    prob_win = map2_dbl(outcomes, n_matches, ~ mean(.x$points > (.y / 2))),
+    prob_draw = map2_dbl(outcomes, n_matches, ~ mean(.x$points == (.y / 2))),
+    prob_loss = map2_dbl(outcomes, n_matches, ~ mean(.x$points < (.y / 2)))
+  )
 ```
 
 ```{r}
@@ -74,22 +75,28 @@ varying_matches <- tibble(n_matches = 1:300) %>%
 ggplot(varying_matches, aes(n_matches, prob_win)) +
   geom_line() +
   scale_y_continuous(labels = scales::percent) +
-  labs(title = "World chess championship",
-       x = "Maximum number of matches",
-       y = "Probability of victory")
+  labs(
+    title = "World chess championship",
+    x = "Maximum number of matches",
+    y = "Probability of victory"
+  )
 
 varying_matches %>%
   gather(outcome, prob, starts_with("prob")) %>%
-  mutate(outcome = str_remove(outcome, "prob_"),
-         outcome = str_to_title(outcome)) %>%
+  mutate(
+    outcome = str_remove(outcome, "prob_"),
+    outcome = str_to_title(outcome)
+  ) %>%
   ggplot(aes(n_matches, prob, color = outcome)) +
   geom_line() +
   scale_y_continuous(labels = scales::percent) +
   scale_color_brewer(type = "qual") +
-  labs(title = "World chess championship",
-       x = "Maximum number of matches",
-       y = "Probability",
-       color = NULL) +
+  labs(
+    title = "World chess championship",
+    x = "Maximum number of matches",
+    y = "Probability",
+    color = NULL
+  ) +
   theme(legend.position = "bottom")
 ```
 

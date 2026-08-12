@@ -8,6 +8,7 @@ categories:
 ---
 
 {{< include ../_setup.qmd >}}
+
 Today's [Riddler Express](https://fivethirtyeight.com/features/can-you-evade-your-evil-twin/) features an interesting optimization problem:
 
 > Channeling your inner Marty McFly, you travel one week back in time in an attempt to win the lottery. It's worth $10 million, and each ticket costs a dollar. Note that if you win, your ticket purchase is not refunded. All of this sounds pretty great.
@@ -46,7 +47,11 @@ theme_set(brand_theme(16))
 #| label: lottery-function
 
 # earnings function
-lottery_earnings <- function(my_tickets = 1, lottery_prize = 1e07, other_tickets = 10){
+lottery_earnings <- function(
+  my_tickets = 1,
+  lottery_prize = 1e07,
+  other_tickets = 10
+) {
   # earnings per ticket
   per_ticket_earnings <- lottery_prize / (my_tickets + other_tickets)
 
@@ -72,10 +77,14 @@ earnings_tbl <- tibble(
 #| echo: false
 
 slice_max(.data = earnings_tbl, order_by = net_earnings, n = 10) %>%
-  mutate(my_tickets = scales::comma_format(accuracy = 1)(my_tickets),
-         net_earnings = scales::dollar(net_earnings)) %>%
-  knitr::kable(col.names = c("Number of tickets purchased", "Net earnings"),
-               caption = "Optimal number of tickets to purchase")
+  mutate(
+    my_tickets = scales::comma_format(accuracy = 1)(my_tickets),
+    net_earnings = scales::dollar(net_earnings)
+  ) %>%
+  knitr::kable(
+    col.names = c("Number of tickets purchased", "Net earnings"),
+    caption = "Optimal number of tickets to purchase"
+  )
 ```
 
 
@@ -85,11 +94,16 @@ slice_max(.data = earnings_tbl, order_by = net_earnings, n = 10) %>%
 #| echo: false
 
 # reduce number of observations to simplify plotting
-earnings_tbl[c(1:1e04, seq(from = 1e04+1, to = 1e07, by = 1e01)), ] %>%
+earnings_tbl[c(1:1e04, seq(from = 1e04 + 1, to = 1e07, by = 1e01)), ] %>%
   ggplot(mapping = aes(x = my_tickets, y = net_earnings)) +
   geom_line() +
-  geom_vline(xintercept = with(earnings_tbl, my_tickets[which(net_earnings == max(net_earnings))]),
-             linetype = 2) +
+  geom_vline(
+    xintercept = with(
+      earnings_tbl,
+      my_tickets[which(net_earnings == max(net_earnings))]
+    ),
+    linetype = 2
+  ) +
   scale_x_log10(labels = scales::comma) +
   scale_y_continuous(labels = scales::dollar) +
   labs(
@@ -107,16 +121,19 @@ earnings_tbl[c(1:1e04, seq(from = 1e04+1, to = 1e07, by = 1e01)), ] %>%
 #| echo: false
 
 earnings_tbl %>%
-  summarize(`Within $10` = sum(abs(net_earnings - max(net_earnings)) < 10),
-            `Within $100` = sum(abs(net_earnings - max(net_earnings)) < 100),
-            `Within $1000` = sum(abs(net_earnings - max(net_earnings)) < 1000)
-            ) %>%
+  summarize(
+    `Within $10` = sum(abs(net_earnings - max(net_earnings)) < 10),
+    `Within $100` = sum(abs(net_earnings - max(net_earnings)) < 100),
+    `Within $1000` = sum(abs(net_earnings - max(net_earnings)) < 1000)
+  ) %>%
   pivot_longer(cols = everything(), names_to = "var", values_to = "value") %>%
   ggplot(mapping = aes(x = var, y = value)) +
   geom_col() +
-  labs(title = "Number of tickets purchased close to optimal",
-       x = NULL,
-       y = "Number of tickets purchased")
+  labs(
+    title = "Number of tickets purchased close to optimal",
+    x = NULL,
+    y = "Number of tickets purchased"
+  )
 ```
 
 [^technically]: Technically we would be guaranteed to lose money after $9{,}999{,}990$ since we know 10 other winning tickets were purchased.
