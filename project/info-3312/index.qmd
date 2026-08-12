@@ -9,13 +9,15 @@ categories:
   - r
   - courses
   - data-science
+other-links:
+  - text: Website
+    href: https://info3312.infosci.cornell.edu/
+    icon: globe
+code-links:
+  - text: Source code
+    href: https://github.com/info-3312/course-site-s23
+    icon: github
 ---
-
-::: {.project-links}
-<a class="btn-links" href="https://info3312.infosci.cornell.edu/" target="_blank" rel="noopener"><i class="bi bi-globe" aria-hidden="true"></i> website</a>
-<a class="btn-links" href="https://github.com/info-3312/course-site-s23" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i> code</a>
-:::
-
 
 ![Data Communication](https://info3312.infosci.cornell.edu/images/logo.svg)
 

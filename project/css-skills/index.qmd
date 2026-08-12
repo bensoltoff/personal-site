@@ -8,13 +8,15 @@ categories:
   - r
   - courses
   - cfss
+other-links:
+  - text: Website
+    href: https://css-skills.uchicago.edu/
+    icon: globe
+code-links:
+  - text: Source code
+    href: https://github.com/css-skills/
+    icon: github
 ---
-
-::: {.project-links}
-<a class="btn-links" href="https://css-skills.uchicago.edu/" target="_blank" rel="noopener"><i class="bi bi-globe" aria-hidden="true"></i> website</a>
-<a class="btn-links" href="https://github.com/css-skills/" target="_blank" rel="noopener"><i class="bi bi-github" aria-hidden="true"></i> code</a>
-:::
-
 
 The Computational Social Science Technical Skills Workshop (or Computation Skills Workshop for short) trains participants in technical skills and methods which are relevant to computationally-driven research, but are not typically taught in for-credit courses. It provides an explicit introduction to core software environments and interfaces which impose a barrier to access for individuals lacking prior exposure to programming, and facilitates a community of computational researchers across the [Division of the Social Sciences](https://socialsciences.uchicago.edu/). Individual workshops are designed for a range of technical backgrounds, including purely introductory methods as well as intermediate or advanced training in specific software or computational techniques. Workshops are designed for hands-on learning, and will include substantial live-coding exercises.
 

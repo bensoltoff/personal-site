@@ -9,12 +9,11 @@ categories:
   - r
   - courses
   - data-science
+other-links:
+  - text: Website
+    href: https://info2950.infosci.cornell.edu/
+    icon: globe
 ---
-
-::: {.project-links}
-<a class="btn-links" href="https://info2950.infosci.cornell.edu/" target="_blank" rel="noopener"><i class="bi bi-globe" aria-hidden="true"></i> website</a>
-:::
-
 
 ![Introduction to Data Science](https://info2950.infosci.cornell.edu/images/logo.svg)
 

@@ -9,12 +9,11 @@ categories:
   - liveproject
   - manning
   - text-data
+other-links:
+  - text: Website
+    href: https://www.manning.com/liveprojectseries/machine-learning-with-r-ser
+    icon: globe
 ---
-
-::: {.project-links}
-<a class="btn-links" href="https://www.manning.com/liveprojectseries/machine-learning-with-r-ser" target="_blank" rel="noopener"><i class="bi bi-globe" aria-hidden="true"></i> website</a>
-:::
-
 
 ![Machine Learning with R for Text Data](featured-hex.jpg)
 
