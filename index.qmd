@@ -1,13 +1,13 @@
 ---
 title: "Benjamin Soltoff"
-subtitle: "Associate Teaching Professor in Information Science, and Director of the Online Master's Program in AI"
+subtitle: "Associate Teaching Professor in Information Science <br> Director of the Online Master's Program in AI"
 image: images/avatar.jpg
 image-alt: "Benjamin Soltoff"
 aliases:
   - /about/
 about:
   template: trestles
-  image-shape: rounded
+  image-shape: round
   links:
     - icon: envelope
       text: Email
@@ -15,9 +15,6 @@ about:
     - icon: github
       text: GitHub
       href: https://github.com/bensoltoff
-    - icon: rss
-      text: Blog RSS
-      href: blog/index.xml
 ---
 
 I am an Associate Teaching Professor in Information Science at
@@ -38,8 +35,7 @@ workshops teaching programming skills to your employees.
 I am originally from Northern Virginia. After graduating from
 [James Madison University](https://www.jmu.edu/), I pursued my PhD in political
 science from [The Pennsylvania State University](https://www.psu.edu/). I am now
-an educator and Associate Teaching Professor at
-[Cornell University](https://infosci.cornell.edu/) where I also direct the
+on faculty at [Cornell University](https://infosci.cornell.edu/) where I also direct the
 Online Master's Program in Artificial Intelligence (launching fall 2027).
 Previously I was an Assistant Senior Instructional Professor at the
 [University of Chicago](https://macss.uchicago.edu/).
@@ -68,12 +64,12 @@ the types of services I can offer you, [contact me directly](contact.qmd).
 
 ##### My amazing wife Amanda
 
-![My amazing wife Amanda](images/ben-amanda.jpg)
+![](images/ben-amanda.jpg)
 
 ##### Our independent children Jacob, Beverly, Rosemarie
 
-![Our independent children Jacob, Beverly, Rosemarie](images/soltoff-kids.jpg)
+![](images/soltoff-kids.jpg)
 
 ##### Our cute cat Ariel
 
-![Our cute cat Ariel](images/ariel.jpg)
+![](images/ariel.jpg)
