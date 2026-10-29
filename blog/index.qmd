@@ -1,0 +1,15 @@
+---
+title: "Recent Posts"
+subtitle: "A collection of personal posts and short coding demonstrations."
+listing:
+  contents: "*/index.qmd"
+  type: default
+  sort: "date desc"
+  page-size: 5
+  categories: unnumbered
+  image-align: left
+  feed: true
+  fields: [image, date, title, description, categories, reading-time]
+page-layout: full
+title-block-banner: false
+---

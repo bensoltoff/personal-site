@@ -1,0 +1,7 @@
+## Session Info
+
+```{r}
+#| cache: false
+#| echo: false
+sessioninfo::session_info()
+```

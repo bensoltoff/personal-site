@@ -1,0 +1,69 @@
+project:
+  type: website
+  output-dir: docs
+  # Only .qmd files are site content. temp/ holds standalone R scratch scripts
+  # and renv/ is library infrastructure; neither should ever be rendered.
+  render:
+    - "**/*.qmd"
+    - "!temp/**"
+    - "!renv/**"
+  preview:
+    port: 4200
+    browser: false
+
+execute:
+  freeze: auto
+
+# ragg renders through systemfonts, which is what lets plots use the brand
+# fonts. The default grDevices png cannot see fonts registered at runtime.
+knitr:
+  opts_chunk:
+    dev: ragg_png
+    dpi: 150
+
+website:
+  title: "Benjamin Soltoff"
+  site-url: https://www.bensoltoff.com
+  description: "Personal website for Benjamin Soltoff."
+  favicon: images/icon-32.png
+  open-graph: true
+  twitter-card: true
+  navbar:
+    logo: images/icon-192.png
+    title: false
+    left:
+      - text: Blog
+        href: blog/index.qmd
+      - text: Projects
+        href: project/index.qmd
+    right:
+      - icon: envelope
+        href: mailto:ben@bensoltoff.com
+        aria-label: Email
+      - icon: github
+        href: https://github.com/bensoltoff
+        aria-label: GitHub
+      - icon: rss
+        href: blog/index.xml
+        aria-label: RSS
+  page-footer:
+    left: "&copy; 2026 Benjamin Soltoff, Ithaca, NY"
+    right:
+      - text: License
+        href: license.qmd
+      - text: Contact
+        href: contact.qmd
+
+format:
+  html:
+    theme:
+      - brand
+      - custom.scss
+    toc: true
+    toc-depth: 2
+    anchor-sections: true
+    smooth-scroll: true
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: github
+    fig-align: center

@@ -2,7 +2,10 @@ library(tidyverse)
 
 ball_lik <- tibble(
   n_balls = seq(from = 22, to = 60, by = 2),
-  lik = map_dbl(.x = n_balls, .f = ~dhyper(x = 8, m = .x / 2, n = .x / 2, k = 8 + 11))
+  lik = map_dbl(
+    .x = n_balls,
+    .f = ~ dhyper(x = 8, m = .x / 2, n = .x / 2, k = 8 + 11)
+  )
 )
 
 max_lik <- with(ball_lik, n_balls[which.max(lik)])

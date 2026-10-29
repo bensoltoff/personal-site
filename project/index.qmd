@@ -1,0 +1,13 @@
+---
+title: "A Project Portfolio"
+subtitle: "Some past and present projects I have developed (courses, packages, projects, etc.)"
+listing:
+  contents: "*/index.qmd"
+  type: grid
+  grid-columns: 3
+  sort: "date desc"
+  categories: false
+  image-height: "12em"
+  fields: [image, title, subtitle, description]
+page-layout: full
+---

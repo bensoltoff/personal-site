@@ -24,12 +24,15 @@ vignettes/*.pdf
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
 .httr-oauth
 
-# .Rprofile API keys
-.Rprofile
-
-# knitr and R markdown default cache directories
+# knitr cache directories. Local render accelerator only -- _freeze/ is the
+# artifact that travels with the repo. These get large (100MB+ for the
+# simulation-heavy posts), so they stay untracked.
 *_cache/
 /cache/
+
+# Quarto scratch directory. _freeze/ and docs/ are deliberately NOT ignored:
+# _freeze/ keeps old posts from re-executing, docs/ is what GitHub Pages serves.
+/.quarto/
 
 # Temporary files created by R markdown
 *.utf8.md
@@ -56,5 +59,4 @@ LICENSE.html
 *.log
 *spark.log*
 
-# ignore public directory
-public/
+**/*.quarto_ipynb

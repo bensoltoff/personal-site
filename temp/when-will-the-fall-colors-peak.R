@@ -8,13 +8,13 @@ library(tidyverse)
 expand_grid(
   N = 1:399,
   L = 1:399
-  ) %>%
+) %>%
   filter(L <= N) %>%
   mutate(
     # calculate average solar year length
     solar_year = (L * 366 + (N - L) * 365) / N,
     # calculate difference from Gregorian average
     diff = abs(365.24217 - solar_year)
-    ) %>%
+  ) %>%
   # find N and L with smallest diff
   arrange(diff)

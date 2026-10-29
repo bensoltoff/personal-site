@@ -1,7 +1,11 @@
 library(tidyverse)
 
 # coins
-coin_combos <- expand.grid(coin1 = c(F, T), coin2 = c(F, T), coin3 = c(F, T)) %>%
+coin_combos <- expand.grid(
+  coin1 = c(F, T),
+  coin2 = c(F, T),
+  coin3 = c(F, T)
+) %>%
   rowSums() %>%
   enframe(name = ".id", value = "n") %>%
   count(n, name = "n_heads")
@@ -16,8 +20,10 @@ dice_combos <- expand.grid(
   count(n, name = "n_dice")
 
 # cards
-card_combos <- combn(x = c(rep(x = TRUE, times = 13),
-                           rep(x = FALSE, times = 39)), m = 3) %>%
+card_combos <- combn(
+  x = c(rep(x = TRUE, times = 13), rep(x = FALSE, times = 39)),
+  m = 3
+) %>%
   colSums() %>%
   enframe(name = "n", value = "hearts") %>%
   count(hearts, name = "n_hearts") %>%
@@ -32,10 +38,3 @@ outcomes %>%
   mutate(across(.cols = c(-n), .fns = ~ . / sum(.))) %>%
   mutate(prob_same = n_heads * n_dice * n_hearts) %>%
   summarize(prob_same = sum(prob_same))
-
-
-
-
-
-
-

@@ -1,0 +1,16 @@
+---
+title: "Contact"
+description: "How to get in touch."
+aliases:
+  - /contact/
+  - /form/contact/
+---
+
+The best way to reach me is by email.
+
+- **Email** — [ben@bensoltoff.com](mailto:ben@bensoltoff.com)
+- **GitHub** — [bensoltoff](https://github.com/bensoltoff)
+
+I am happy to hear from you about teaching, consulting, or custom training and
+research services. For more on what I can offer, see
+[my about page](index.qmd).

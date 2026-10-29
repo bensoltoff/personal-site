@@ -4,16 +4,16 @@ library(furrr)
 
 # setup player data frame
 players <- tibble::tribble(
-  ~name, ~value, ~type,
-  "pahomes", 400, "qb",
-  "jallen", 350, "qb",
-  "kurray", 300, "qb",
-  "mcchristian", 300, "rb",
-  "dook", 225, "rb",
-  "denry", 200, "rb",
-  "dadams", 250, "wr",
-  "till", 225, "wr",
-  "stiggs", 175, "wr"
+  ~name         , ~value , ~type ,
+  "pahomes"     ,    400 , "qb"  ,
+  "jallen"      ,    350 , "qb"  ,
+  "kurray"      ,    300 , "qb"  ,
+  "mcchristian" ,    300 , "rb"  ,
+  "dook"        ,    225 , "rb"  ,
+  "denry"       ,    200 , "rb"  ,
+  "dadams"      ,    250 , "wr"  ,
+  "till"        ,    225 , "wr"  ,
+  "stiggs"      ,    175 , "wr"
 )
 
 # define draft order for fantasy teams
@@ -24,7 +24,11 @@ library(combinat)
 draft_orders <- permn(players$name)
 
 # throw away invalid permutations
-valid_draft <- function(draft_players, draft_order = snake_order, players_df = players) {
+valid_draft <- function(
+  draft_players,
+  draft_order = snake_order,
+  players_df = players
+) {
   # replace players with positions
   draft_pos <- players$type[match(draft_players, players$name)]
 
@@ -43,7 +47,11 @@ valid_draft <- function(draft_players, draft_order = snake_order, players_df = p
 draft_orders_valid <- map_lgl(.x = draft_orders, .f = valid_draft)
 
 # calculate fantasy scores for a given draft
-fantasy_score <- function(draft_players, draft_order = snake_order, players_df = players) {
+fantasy_score <- function(
+  draft_players,
+  draft_order = snake_order,
+  players_df = players
+) {
   # replace players with points
   draft_points <- players$value[match(draft_players, players$name)]
 
@@ -55,7 +63,11 @@ fantasy_score <- function(draft_players, draft_order = snake_order, players_df =
 }
 
 # apply scoring function to all valid drafts
-draft_results <- map_dfr(.x = draft_orders[draft_orders_valid], .f = fantasy_score, .id = ".id")
+draft_results <- map_dfr(
+  .x = draft_orders[draft_orders_valid],
+  .f = fantasy_score,
+  .id = ".id"
+)
 
 # calculate average score for each draft position
 draft_results %>%
@@ -65,6 +77,3 @@ draft_results %>%
   pivot_longer(A:C, names_to = "player", values_to = "score") %>%
   ggplot(mapping = aes(x = player, y = score)) +
   geom_violin()
-
-
-

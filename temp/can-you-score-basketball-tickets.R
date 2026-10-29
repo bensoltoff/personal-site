@@ -12,7 +12,9 @@ poss_outcomes <- expand_grid(
   array_branch(margin = 1) %>%
   enframe(name = ".id", value = "roll_outcomes") %>%
   # calculate all possible combinations from the four rolls
-  mutate(combos_poss = map(.x = roll_outcomes, .f = combn, m = 2, simplify = FALSE)) %>%
+  mutate(
+    combos_poss = map(.x = roll_outcomes, .f = combn, m = 2, simplify = FALSE)
+  ) %>%
   unnest_longer(col = combos_poss) %>%
   # calculate the sum of all possible two-dice combos
   mutate(combos_sum = map_dbl(.x = combos_poss, .f = sum))
@@ -25,10 +27,14 @@ poss_combos <- combn(2:12, m = 4) %>%
 
 poss_combos %>%
   # calculate how often each combination of choices wins
-  mutate(num_victory = map_dbl(.x = roll_choices, .f = ~ poss_outcomes %>%
-                                 filter(combos_sum %in% .x) %>%
-                                 ungroup() %>%
-                                 distinct(.id) %>%
-                                 nrow()
-  )) %>%
+  mutate(
+    num_victory = map_dbl(
+      .x = roll_choices,
+      .f = ~ poss_outcomes %>%
+        filter(combos_sum %in% .x) %>%
+        ungroup() %>%
+        distinct(.id) %>%
+        nrow()
+    )
+  ) %>%
   arrange(-num_victory)

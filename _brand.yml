@@ -1,0 +1,66 @@
+meta:
+  name: Benjamin Soltoff
+  link:
+    home: https://www.bensoltoff.com
+
+logo:
+  small: images/icon-32.png
+  medium: images/icon-192.png
+
+# Palette carried over from the old hugo-apero "plum" theme. Names are its own.
+#
+# Note: no `link:` key here. Quarto's brand schema accepts color.link, but the
+# brand.yml R package (used for theme_brand_ggplot2) rejects it, and both have
+# to read this same file. Links fall back to `primary`.
+color:
+  palette:
+    cultured: "#f6f7f9"
+    lavender-blush: "#e8d9db"
+    onyx: "#38383a"
+    rifle-green: "#414a37"
+    rosewood: "#5b0b15"
+    black-bean: "#490910"
+    persian-plum: "#6d0d19"
+    silver-pink: "#c4b1b2"
+    isabelline: "#f5f5f4"
+  background: cultured
+  foreground: onyx
+  primary: persian-plum
+  secondary: silver-pink
+  light: isabelline
+  dark: onyx
+
+typography:
+  fonts:
+    # Self-hosted, carried over from the old theme, which mapped Commissioner
+    # Light and Fraunces 9pt Soft Thin onto weight 400.
+    - family: Commissioner
+      source: file
+      files:
+        - path: assets/fonts/Commissioner-Light.woff2
+          weight: 400
+          style: normal
+        - path: assets/fonts/Commissioner-LightItalic.woff2
+          weight: 400
+          style: italic
+    - family: Fraunces
+      source: file
+      files:
+        - path: assets/fonts/Fraunces9ptSoft-Thin.woff2
+          weight: 400
+          style: normal
+        - path: assets/fonts/Fraunces9ptSoft-ThinItalic.woff2
+          weight: 400
+          style: italic
+  base:
+    family: Commissioner
+    line-height: 1.5
+  headings:
+    family: Fraunces
+    weight: 400
+    color: rosewood
+  # Monospace is deliberately left unset. Naming a single family here emits
+  # `font-family: Consolas` with no fallback, so any machine without Consolas
+  # drops to the browser default serif. Quarto's own stack (SFMono-Regular,
+  # Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace) is
+  # sans-serif everywhere, which is what the old site rendered.

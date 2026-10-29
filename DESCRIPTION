@@ -1,0 +1,8 @@
+Package: personalsite
+Type: Analysis
+Imports: 
+  usethis,
+  reprex,
+  devtools,
+  gitcreds,
+  blogdown

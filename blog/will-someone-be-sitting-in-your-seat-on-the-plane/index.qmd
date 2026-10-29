@@ -1,0 +1,144 @@
+---
+title: "Will Someone Be Sitting In Your Seat On The Plane?"
+description: "This week's Riddler puzzle on FiveThirtyEight features the following questions: There’s an airplane with 100 seats, and there are 100 ticketed passengers each with an assigned seat. They line up to board in some random order."
+date: "2016-02-21"
+image: featured.jpg
+categories:
+  - r
+  - riddler
+aliases:
+  - /r/will-someone-be-sitting-in-your-seat-on-the-plane/
+  - /post/will-someone-be-sitting-in-your-seat-on-the-plane/
+---
+
+::: {.callout-note}
+## Code updated
+
+This post was originally written in 2016 and was last rendered under R 4.0.4. The code has been minimally updated to run under R 4.6.1: `dplyr::tbl_df()`, defunct since dplyr 1.0.0, was replaced with `tibble::as_tibble()`. The analysis and its conclusions are unchanged.
+:::
+
+{{< include ../_setup.qmd >}}
+
+
+```{r}
+#| label: post-settings
+#| include: false
+
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE)
+options(digits = 2)
+```
+
+```{r}
+#| label: packages
+#| cache: false
+
+library(tidyverse)
+theme_set(brand_theme(16))
+set.seed(123)
+```
+
+```{r}
+#| label: sim-seats-func
+
+simulate_seats <- function(seats = 100, planes = 100000) {
+  m <- matrix(seq_len(seats), nrow = seats, ncol = planes)
+  
+  m[1, ] <- sample(seats, planes, replace = TRUE)
+  m[cbind(m[1, ], seq_len(planes))] <- 1
+  
+  for (i in seq(2, seats - 1)) {
+    taken <- which(m[i, ] != i)
+    
+    switch_with <- sample(seq(i, seats), length(taken), replace = TRUE)
+    
+    replacements <- m[cbind(switch_with, taken)]
+    m[cbind(switch_with, taken)] <- m[i, taken]
+    m[i, taken] <- replacements
+  }
+  m
+}
+```
+
+[This week's Riddler puzzle on FiveThirtyEight](http://fivethirtyeight.com/features/will-someone-be-sitting-in-your-seat-on-the-plane/) features the following questions:
+
+> There’s an airplane with 100 seats, and there are 100 ticketed passengers each with an assigned seat. They line up to board in some random order. However, the first person to board is the worst person alive, and just sits in a random seat, without even looking at his boarding pass. Each subsequent passenger sits in his or her own assigned seat if it’s empty, but sits in a random open seat if the assigned seat is occupied. What is the probability that you, the hundredth passenger to board, finds your seat unoccupied?
+
+Coincidentally, I had seen "the lost boarding pass" problem described and solved using R on [David Robinson's blog](http://varianceexplained.org/r/boarding-pass-simulation/). In short, the answer is 50%. In asking for special extensions to the problem, I decided to evaluate if the probability remains constant across plane size. In fact, it does.
+
+An [Airbus A380](https://en.wikipedia.org/wiki/Airbus_A380) has a maximum passenger capacity of 538 seats, which I rounded up to 600 for my maximum plane size. As seen below, it doesn't matter the size of the plane - the probability of the last passenger sitting in his assigned seat is always 1/2.
+
+```{r}
+#| label: sims
+#| dependson: sim-seats-func
+
+# sim for flights of between 10 and 600 seats
+seats <- 3:600
+sims <- lapply(seats, function(x) simulate_seats(seats = x, planes = 1000))
+probs <- lapply(seats, function(x) mean(sims[[x - 2]][x, ] == x))
+```
+
+```{r}
+#| label: plot1
+#| dependson: sims
+
+tibble(seats = seats,
+       prob = unlist(probs)) %>%
+  ggplot(aes(seats, prob)) +
+  geom_point(alpha = .2) +
+  geom_smooth(se = FALSE) +
+  ylim(0,1) +
+  labs(x = "Number of Seats on Plane",
+       y = "Probability Last Passenger Gets Correct Seat")
+```
+
+In fact, as long as you are not one of the last passengers to board the airplane, you have an extremely high probability of sitting in your correct seat.
+
+```{r}
+#| label: correct_by_seat
+#| dependson: sims
+
+correct_by_seats <- lapply(sims, function(sim) rowMeans(sim == seq_len(nrow(sim))))
+
+n.obs <- sapply(correct_by_seats, length)
+seq.max <- seq_len(max(n.obs))
+correct_by_seats <- sapply(correct_by_seats, "[", i = seq.max) %>%
+  as.data.frame %>%
+  as_tibble() %>%
+  gather(seats, prob) %>%
+  na.omit %>%
+  group_by(seats) %>%
+  mutate(passenger = seq_len(n()),
+         passenger_rev = rev(passenger)) %>%
+  ungroup %>%
+  mutate(seats = parse_number(seats) + 2)
+```
+
+```{r}
+#| label: plot2
+#| dependson: correct_by_seat
+
+ggplot(correct_by_seats, aes(passenger, prob, group = seats)) +
+  geom_line(alpha = .2) +
+  labs(x = "Passenger Boarding Order",
+       y = "Probability of Sitting in Correct Seat")
+```
+
+We can in fact be a bit more precise. As long as you are not one of the last 10 passengers to board the plane, regardless of the size of the plane, you have a greater than 90% chance of sitting in your correct seat.
+
+```{r}
+#| label: plot3
+#| dependson: correct_by_seat
+
+correct_by_seats %>%
+  group_by(passenger_rev) %>%
+  summarize(mean = mean(prob)) %>%
+  ggplot(aes(passenger_rev, mean)) +
+  geom_point(alpha = .2) +
+  geom_line() +
+  labs(x = "Reverse Passenger Boarding Order",
+       y = "Average Probability of Sitting in Correct Seat")
+```
+
+
+
+{{< include ../_session-info.qmd >}}

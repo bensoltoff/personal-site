@@ -24,4 +24,3 @@ dice_6_combos <- expand_grid(
 dice_6_combos %>%
   mutate(win = d6 > d4 & d8 > d6 & d10 > d8 & d12 > d10 & d20 > d12) %>%
   count(win)
-
